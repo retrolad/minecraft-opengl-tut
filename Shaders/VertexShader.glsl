@@ -11,6 +11,6 @@ void main()
 {
     // gl_Position ia a predefined variable
     // This will be output data of vertex shader
-    gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
+    gl_Position = vec4(aPos.x, -aPos.y, aPos.z, 1.0);
     vColor = aColor;
 }
