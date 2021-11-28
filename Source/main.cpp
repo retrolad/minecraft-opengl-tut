@@ -60,6 +60,7 @@ int main()
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     Shader shaderProgram("../Shaders/VertexShader.glsl", "../Shaders/FragmentShader.glsl");
+    float offset = 0.5f;
 
     /** VERTEX BUFFER OBJECTS (VBO) & VERTEX OBJECT ARRAY (VAO) */
 
@@ -166,7 +167,9 @@ int main()
         // Clear specified buffer
         glClear(GL_COLOR_BUFFER_BIT);
 
+        // Should use this every cycle?
         shaderProgram.use();
+        shaderProgram.setFloat("xOffset", offset);
 
         float timeValue = glfwGetTime();
         float blueValue = std::sin(timeValue) / 2.0f + 0.5f;
