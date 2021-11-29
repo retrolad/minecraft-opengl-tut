@@ -4,6 +4,7 @@
 #include <stdexcept>
 
 #include "Shaders/Shader.h"
+#include "Utils/stb_image.h"
 
 // A window resize callback
 // Also called on window creation with the same dimensions
@@ -60,15 +61,67 @@ int main()
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     Shader shaderProgram("../Shaders/VertexShader.glsl", "../Shaders/FragmentShader.glsl");
-    float offset = 0.5f;
+
+
+    /** TEXTURE */
+
+
+    // Generate texture object & id
+    GLuint texture;
+    glGenTextures(1, &texture);
+
+    // Bind texture
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    // Set the texture wrapping/filtering options on the currently bound texture object
+    // x wrapping
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    // y wrapping
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    // Use linear interpolation between the two closest mipmaps
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    // Use linear interpolation when magnifying
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    
+    // Load texture
+    // nrChannels - number of color channels
+    int width, height, nrChannels;
+    unsigned char* data = stbi_load("../Resources/Textures/brick.jpg", &width, &height, &nrChannels, 0);
+
+    if(!data)
+    {
+        throw std::runtime_error("Failed to load texture");
+    }
+
+    // Generate the texture image on the currently bound texture
+    // object
+    /** 
+     * target - 
+     * level - level of detail (LOD)
+     * internalformat - number of color components in the texture
+     * width
+     * height
+     * border - should always be 0 (legacy)
+     * format - format of the pixel data
+     * type - the data type of the pixel data (we loaded image as rgb and stored
+     *        in unsigned chad*)
+     * data - a pointer to the image data
+    */
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    // Automatically generate all the required mipmaps for the currently bound texture
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    // Free the image memory
+    stbi_image_free(data);
 
     /** VERTEX BUFFER OBJECTS (VBO) & VERTEX OBJECT ARRAY (VAO) */
 
     float vertices[] = {
-        // coords           // colors
-        0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,
-       -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,
-        0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f  
+        // coords           // colors          // texture coords
+        0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  1.0f, 0.0f, 
+       -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  0.0f, 0.0f, 
+       -0.5f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  0.0f, 1.0f,
+        0.5f,  0.5f, 0.0f,  1.0f, 0.0f, 1.0f,  1.0f, 1.0f,
     };
 
     // float vertices[] = {
@@ -86,8 +139,8 @@ int main()
     // Index buffer data
     // OpenGL draws in clockwise order
     unsigned int indices[] = {
-        0, 1, 3,
-        1, 2, 3
+        0, 2, 3,
+        0, 1, 2
     };
 
     // Generate buffer object to store vertices
@@ -136,17 +189,23 @@ int main()
      *              in our case
      */
     // Position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 
     // Enable vertex attribute
     glEnableVertexAttribArray(0);
 
     // Color attribute
     // Color has 3 components
-    // There is 6 * sizeof(float) bytes between every color attributes
+    // There is 8 * sizeof(float) bytes between every color attributes
     // Color attribute begins at 3 * sizeof(float)
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+
+    // Texture attribute
+    // Has 2 components
+    // Texture attribute begins at 6 * sizeof(float)
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
 
     // Draw as lines (wireframe mode). Apply to front and back triangles
     // of a polygon
@@ -167,9 +226,11 @@ int main()
         // Clear specified buffer
         glClear(GL_COLOR_BUFFER_BIT);
 
+        // Bind texture
+        glBindTexture(GL_TEXTURE_2D, texture);
+
         // Should use this every cycle?
         shaderProgram.use();
-        shaderProgram.setFloat("xOffset", offset);
 
         float timeValue = glfwGetTime();
         float blueValue = std::sin(timeValue) / 2.0f + 0.5f;
@@ -185,17 +246,22 @@ int main()
         // mode - type of primitive
         // start index
         // number of vertices
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        // glDrawArrays(GL_TRIANGLES, 0, 6);
         // mode - primitive type
         // count - number of elements to draw
         // type - the type of the values in indices
         // pointer - offset in a buffer where the indices are stored
-        // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         // Swap back and front buffers
         glfwSwapBuffers(window);
         // Process nad handle window and input events
         glfwPollEvents();
     }
+
+    // Free all resources
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
 
     glfwTerminate();
     return 0;
