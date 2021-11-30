@@ -65,13 +65,14 @@ int main()
 
     /** TEXTURE */
 
+    // Generate textures objects & ids
+    GLuint texture1, texture2;
 
-    // Generate texture object & id
-    GLuint texture;
-    glGenTextures(1, &texture);
+    // Texture 1 - brick wall
+    glGenTextures(1, &texture1);
 
     // Bind texture
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glBindTexture(GL_TEXTURE_2D, texture1);
 
     // Set the texture wrapping/filtering options on the currently bound texture object
     // x wrapping
@@ -83,14 +84,17 @@ int main()
     // Use linear interpolation when magnifying
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     
-    // Load texture
+    // Flip image to show it properly
+    stbi_set_flip_vertically_on_load(true);
+
+    // Load texture1
     // nrChannels - number of color channels
     int width, height, nrChannels;
     unsigned char* data = stbi_load("../Resources/Textures/brick.jpg", &width, &height, &nrChannels, 0);
 
     if(!data)
     {
-        throw std::runtime_error("Failed to load texture");
+        throw std::runtime_error("Failed to load texture1");
     }
 
     // Generate the texture image on the currently bound texture
@@ -104,7 +108,7 @@ int main()
      * border - should always be 0 (legacy)
      * format - format of the pixel data
      * type - the data type of the pixel data (we loaded image as rgb and stored
-     *        in unsigned chad*)
+     *        in unsigned char* (bytes))
      * data - a pointer to the image data
     */
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -112,6 +116,33 @@ int main()
     glGenerateMipmap(GL_TEXTURE_2D);
 
     // Free the image memory
+    stbi_image_free(data);
+
+
+    // Texture 2 - mu badge
+
+    glGenTextures(1, &texture2);
+    glBindTexture(GL_TEXTURE_2D, texture2);
+
+    // Texture wrapping
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    // Texture filtering
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    
+    data = stbi_load("../Resources/Textures/mu.png", &width, &height, &nrChannels, 0);
+
+    if(!data)
+    {
+        throw std::runtime_error("Failed to load texture2");
+    }
+
+    // This image includes alpha channel
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
     stbi_image_free(data);
 
     /** VERTEX BUFFER OBJECTS (VBO) & VERTEX OBJECT ARRAY (VAO) */
@@ -211,6 +242,15 @@ int main()
     // of a polygon
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+    // Tell OpenGL to which texure unit each shader sampler belongs to
+    // Only need to set this once
+    // Activate shader before setting uniforms
+    shaderProgram.use();
+    // Set by hand
+    glUniform1i(glGetUniformLocation(shaderProgram.getID(), "texture1"), 0);
+    // Or via our shader class
+    shaderProgram.setInt("texture2", 1);
+
     /** RENDER LOOP */
 
     // Render loop
@@ -226,8 +266,12 @@ int main()
         // Clear specified buffer
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // Bind texture
-        glBindTexture(GL_TEXTURE_2D, texture);
+        // Bind texture to corresponding textures units
+        // Texture units are uniform variables in fragment shader
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture1);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texture2);
 
         // Should use this every cycle?
         shaderProgram.use();
