@@ -2,7 +2,9 @@
 #include <GLFW/glfw3.h>
 #include <cmath>
 #include <stdexcept>
+#include <iostream>
 
+#include "rtexcept.h"
 #include "Shaders/Shader.h"
 #include "Texture/Texture.h"
 
@@ -60,6 +62,8 @@ int main()
     // Will be called on every window resize
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
+    std::cout << glGetString(GL_VERSION) << std::endl;
+
     Shader shaderProgram("../Shaders/VertexShader.glsl", "../Shaders/FragmentShader.glsl");
 
 
@@ -68,94 +72,14 @@ int main()
     Texture texture1("../Resources/Textures/brick.jpg");
     Texture texture2("../Resources/Textures/mu.png");
 
-    // // Generate textures objects & ids
-    // GLuint texture1, texture2;
-
-    // //Texture 1 - brick wall
-    // glGenTextures(1, &texture1);
-
-    // // Bind texture
-    // glBindTexture(GL_TEXTURE_2D, texture1);
-
-    // // Set the texture wrapping/filtering options on the currently bound texture object
-    // // x wrapping
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    // // y wrapping
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    // // Use linear interpolation between the two closest mipmaps
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    // // Use linear interpolation when magnifying
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    
-    // // Flip image to show it properly
-    // stbi_set_flip_vertically_on_load(true);
-
-    // // Load texture1
-    // // nrChannels - number of color channels
-    // int width, height, nrChannels;
-    // unsigned char* data = stbi_load("../Resources/Textures/brick.jpg", &width, &height, &nrChannels, 0);
-
-    // if(!data)
-    // {
-    //     throw std::runtime_error("Failed to load texture1");
-    // }
-
-    // // Generate the texture image on the currently bound texture
-    // // object
-    // /** 
-    //  * target - 
-    //  * level - level of detail (LOD)
-    //  * internalformat - number of color components in the texture
-    //  * width
-    //  * height
-    //  * border - should always be 0 (legacy)
-    //  * format - format of the pixel data
-    //  * type - the data type of the pixel data (we loaded image as rgb and stored
-    //  *        in unsigned char* (bytes))
-    //  * data - a pointer to the image data
-    // */
-    // glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-    // // Automatically generate all the required mipmaps for the currently bound texture
-    // glGenerateMipmap(GL_TEXTURE_2D);
-
-    // // Free the image memory
-    // stbi_image_free(data);
-
-
-    // // Texture 2 - mu badge
-
-    // glGenTextures(1, &texture2);
-    // glBindTexture(GL_TEXTURE_2D, texture2);
-
-    // // Texture wrapping
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-    // // Texture filtering
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    
-    // data = stbi_load("../Resources/Textures/mu.png", &width, &height, &nrChannels, 0);
-
-    // if(!data)
-    // {
-    //     throw std::runtime_error("Failed to load texture2");
-    // }
-
-    // // This image includes alpha channel
-    // glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-    // glGenerateMipmap(GL_TEXTURE_2D);
-
-    // stbi_image_free(data);
-
     /** VERTEX BUFFER OBJECTS (VBO) & VERTEX OBJECT ARRAY (VAO) */
 
     float vertices[] = {
         // coords           // colors          // texture coords
-        0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  1.0f, 0.0f, 
        -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  0.0f, 0.0f, 
-       -0.5f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  0.0f, 1.0f,
+        0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  1.0f, 0.0f, 
         0.5f,  0.5f, 0.0f,  1.0f, 0.0f, 1.0f,  1.0f, 1.0f,
+       -0.5f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  0.0f, 1.0f,
     };
 
     // float vertices[] = {
@@ -173,8 +97,8 @@ int main()
     // Index buffer data
     // OpenGL draws in clockwise order
     unsigned int indices[] = {
-        0, 2, 3,
-        0, 1, 2
+        0, 1, 2,
+        2, 3, 0
     };
 
     // Generate buffer object to store vertices
@@ -202,7 +126,7 @@ int main()
     /** VERTEX ATTRIBUTES LINKING */
 
     // Specify how OpenGL should interpret the vertex buffer data whenever a drawing call
-    // made. The interpretation specified is stored in currently bound VAO. So this links
+    // made (layout of vertex buffer). The interpretation specified is stored in currently bound VAO. So this links
     // VBO with VAO
     /** 
      * index -      Vertex attribute index. We specified position as first attribute 
@@ -297,6 +221,7 @@ int main()
         // type - the type of the values in indices
         // pointer - offset in a buffer where the indices are stored
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        
         // Swap back and front buffers
         glfwSwapBuffers(window);
         // Process nad handle window and input events

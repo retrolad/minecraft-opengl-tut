@@ -61,6 +61,7 @@ Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath)
 
      // Check for errors
     glGetProgramiv(ID, GL_LINK_STATUS, &success);
+    // glValidateProgram(ID); the same?
     if(!success)
     {
         glGetProgramInfoLog(ID, 512, NULL, infoLog);
