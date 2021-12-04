@@ -3,6 +3,9 @@
 #include <cmath>
 #include <stdexcept>
 #include <iostream>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "rtexcept.h"
 #include "Shaders/Shader.h"
@@ -15,6 +18,23 @@ void processInput(GLFWwindow* window);
 
 const unsigned int WIN_WIDTH = 800;
 const unsigned int WIN_HEIGHT = 600;
+
+void glmTest(glm::mat4& trans)
+{
+    // glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
+    // glm::mat4 trans = glm::mat4(1.0f);
+    // trans = glm::translate(trans, glm::vec3(1.0f, 1.0f, 0.0f));
+    // vec = trans * vec;
+
+    for(int i = 0; i < 4; i++)
+    {
+        for(int j = 0; j < 4; j++)
+            std::cout << trans[i][j] << " ";
+        std::cout << std::endl;
+    }
+
+    // std::cout << vec[0] << " " << vec[1] << " " << vec[2] << std::endl;
+}
 
 int main()
 {
@@ -43,6 +63,8 @@ int main()
     // Make this window's context current for the calling thread
     glfwMakeContextCurrent(window);
 
+    // glfwSwapInterval(1);
+
     // Initialize GLAD
     // We pass a function that can load addresses of OpenGL functions
     // That function will be our OpenGL functions loader
@@ -66,7 +88,6 @@ int main()
 
     Shader shaderProgram("../Shaders/VertexShader.glsl", "../Shaders/FragmentShader.glsl");
 
-
     /** TEXTURE */
 
     Texture texture1("../Resources/Textures/brick.jpg");
@@ -84,14 +105,14 @@ int main()
 
     // float vertices[] = {
     //     // first triangle
-    //     0.5f,  0.5f, 0.0f,   // верхняя правая
-    //     0.5f, -0.5f, 0.0f,   // нижняя правая
-    //     -0.5f, -0.5f, 0.0f,  // нижняя левая
+    //     0.5f,  0.5f, 0.0f,   
+    //     0.5f, -0.5f, 0.0f,   
+    //     -0.5f, -0.5f, 0.0f,  
 
     //     // second triangle
-    //     0.5f,  0.5f, 0.0f,   // верхняя правая
-    //     -0.5f, -0.5f, 0.0f,  // нижняя левая
-    //     -0.5f,  0.5f, 0.0f   // верхняя левая 
+    //     0.5f,  0.5f, 0.0f,   
+    //     -0.5f, -0.5f, 0.0f,  
+    //     -0.5f,  0.5f, 0.0f   
     // };
 
     // Index buffer data
@@ -178,6 +199,16 @@ int main()
     // Or via our shader class
     shaderProgram.setInt("texture2", 1);
 
+    //glm::mat4 trans = glm::mat4(1.0f);
+    //trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    //glmTest(trans);
+
+    // Uniform location
+    // Tell OpenGL how many matrices we send
+    // Do we want to transpone the matrix. OpenGL and glm have the same ordering (by column)
+    // Return matrix in representation that OpenGL can work with
+    //glUniformMatrix4fv(glGetUniformLocation(shaderProgram.getID(), "transform"), 1, GL_FALSE, glm::value_ptr(trans));
+
     /** RENDER LOOP */
 
     // Render loop
@@ -204,6 +235,13 @@ int main()
         float timeValue = glfwGetTime();
         float blueValue = std::sin(timeValue) / 2.0f + 0.5f;
         
+        glm::mat4 trans = glm::mat4(1.0f);
+        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+        // Uniform location
+        // Tell OpenGL how many matrices we send
+        // Do we want to transpone the matrix. OpenGL and glm have the same ordering (by column)
+        // Return matrix in representation that OpenGL can work with
+        glUniformMatrix4fv(glGetUniformLocation(shaderProgram.getID(), "transform"), 1, GL_FALSE, glm::value_ptr(trans));
         //shaderProgram(vertexColorLocation, 1.0f, 0.5f, blueValue, 1.0f);
 
         glBindVertexArray(VAO);
