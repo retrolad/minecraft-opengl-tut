@@ -3,8 +3,8 @@
 // Specify all attributes of input vertices
 // Here we're only interested n position
 layout (location = 0) in vec3 aPos;
-layout (location = 1) in vec3 aColor;
-layout (location = 2) in vec2 aTexCoord;
+layout (location = 1) in vec2 aTexCoord;
+layout (location = 2) in vec3 aColor;
 
 uniform float xOffset;
 uniform mat4 transform;

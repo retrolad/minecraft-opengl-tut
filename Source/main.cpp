@@ -95,7 +95,7 @@ int main()
 
     /** VERTEX BUFFER OBJECTS (VBO) & VERTEX OBJECT ARRAY (VAO) */
 
-    float vertices[] = {
+    float vertices2[] = {
         // coords           // colors          // texture coords
        -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  0.0f, 0.0f, 
         0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  1.0f, 0.0f, 
@@ -103,17 +103,49 @@ int main()
        -0.5f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  0.0f, 1.0f,
     };
 
-    // float vertices[] = {
-    //     // first triangle
-    //     0.5f,  0.5f, 0.0f,   
-    //     0.5f, -0.5f, 0.0f,   
-    //     -0.5f, -0.5f, 0.0f,  
-
-    //     // second triangle
-    //     0.5f,  0.5f, 0.0f,   
-    //     -0.5f, -0.5f, 0.0f,  
-    //     -0.5f,  0.5f, 0.0f   
-    // };
+    float vertices[] = {
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+        0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+    
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+    
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+    
+        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+    
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+    
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+    };
 
     // Index buffer data
     // OpenGL draws in clockwise order
@@ -168,7 +200,7 @@ int main()
      *              in our case
      */
     // Position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 
     // Enable vertex attribute
     glEnableVertexAttribArray(0);
@@ -177,14 +209,14 @@ int main()
     // Color has 3 components
     // There is 8 * sizeof(float) bytes between every color attributes
     // Color attribute begins at 3 * sizeof(float)
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
     // Texture attribute
     // Has 2 components
     // Texture attribute begins at 6 * sizeof(float)
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    glEnableVertexAttribArray(2);
+    // glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    // glEnableVertexAttribArray(2);
 
     // Draw as lines (wireframe mode). Apply to front and back triangles
     // of a polygon
@@ -198,20 +230,6 @@ int main()
     glUniform1i(glGetUniformLocation(shaderProgram.getID(), "texture1"), 0);
     // Or via our shader class
     shaderProgram.setInt("texture2", 1);
-
-    // Model matrix
-    glm::mat4 model = glm::mat4(1.0f);
-    model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-
-    // View matrix
-    glm::mat4 view = glm::mat4(1.0f);
-    // Translate the scene forward (same as translating the camera back)
-    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-
-    // Projection matrix
-    glm::mat4 projection;
-    // FOV, aspect ration, near plane, far plane
-    projection = glm::perspective(glm::radians(45.0f), 800.0f/600.0f, 0.1f, 100.0f);
 
     /** RENDER LOOP */
 
@@ -230,8 +248,8 @@ int main()
 
         // Bind texture to corresponding textures units
         // Texture units are uniform variables in fragment shader
-        // texture1.Bind(0);
-        texture2.Bind(1);
+        texture1.Bind(0);
+        // texture2.Bind(1);
 
         // Should use this every cycle?
         shaderProgram.use();
@@ -250,7 +268,22 @@ int main()
         glUniformMatrix4fv(glGetUniformLocation(shaderProgram.getID(), "transform"), 1, GL_FALSE, glm::value_ptr(trans));
         //shaderProgram(vertexColorLocation, 1.0f, 0.5f, blueValue, 1.0f);
 
-        // model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+        //model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+
+        // Model matrix
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+
+        // View matrix
+        glm::mat4 view = glm::mat4(1.0f);
+        // Translate the scene forward (same as translating the camera back)
+        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+
+        // Projection matrix
+        glm::mat4 projection;
+        // FOV, aspect ration, near plane, far plane
+        projection = glm::perspective(glm::radians(45.0f), 800.0f/600.0f, 0.1f, 100.0f);
 
         // Send transorm matrices to the shader
         glUniformMatrix4fv(glGetUniformLocation(shaderProgram.getID(), "model"), 1, GL_FALSE, glm::value_ptr(model));
@@ -266,22 +299,11 @@ int main()
         // mode - type of primitive
         // start index
         // number of vertices
-        // glDrawArrays(GL_TRIANGLES, 0, 6);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
         // mode - primitive type
         // count - number of elements to draw
         // type - the type of the values in indices
         // pointer - offset in a buffer where the indices are stored
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-        // Second object
-        // texture1.Bind(0);
-
-        // float sc = glm::sin(glfwGetTime());
-        // trans = glm::mat4(1.0f);
-        // trans = glm::scale(trans, glm::vec3(sc,sc,sc));
-        // trans = glm::translate(trans, glm::vec3(-0.5f, 0.5f, 0.0f));
-        // glUniformMatrix4fv(glGetUniformLocation(shaderProgram.getID(), "transform"), 1, GL_FALSE, glm::value_ptr(trans));
-
         // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         
         // Swap back and front buffers
