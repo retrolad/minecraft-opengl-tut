@@ -97,6 +97,19 @@ int main()
 
     /** VERTEX BUFFER OBJECTS (VBO) & VERTEX OBJECT ARRAY (VAO) */
 
+    glm::vec3 cubePositions[] = {
+        glm::vec3( 0.0f,  0.0f,  0.0f), 
+        glm::vec3( 2.0f,  5.0f, -15.0f), 
+        glm::vec3(-1.5f, -2.2f, -2.5f),  
+        glm::vec3(-3.8f, -2.0f, -12.3f),  
+        glm::vec3( 2.4f, -0.4f, -3.5f),  
+        glm::vec3(-1.7f,  3.0f, -7.5f),  
+        glm::vec3( 1.3f, -2.0f, -2.5f),  
+        glm::vec3( 1.5f,  2.0f, -2.5f), 
+        glm::vec3( 1.5f,  0.2f, -1.5f), 
+        glm::vec3(-1.3f,  1.0f, -1.5f)  
+    };
+
     float vertices2[] = {
         // coords           // colors          // texture coords
        -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  0.0f, 0.0f, 
@@ -258,24 +271,10 @@ int main()
 
         float timeValue = glfwGetTime();
         float blueValue = std::sin(timeValue) / 2.0f + 0.5f;
-        
-
-        glm::mat4 trans = glm::mat4(1.0f);
-        trans = glm::translate(trans, glm::vec3(0.5f, 0.5f, 0.0f));
-        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-        // Uniform location
-        // Tell OpenGL how many matrices we send
-        // Do we want to transpone the matrix. OpenGL and glm have the same ordering (by column)
-        // Return matrix in representation that OpenGL can work with
-        glUniformMatrix4fv(glGetUniformLocation(shaderProgram.getID(), "transform"), 1, GL_FALSE, glm::value_ptr(trans));
-        //shaderProgram(vertexColorLocation, 1.0f, 0.5f, blueValue, 1.0f);
-
-        //model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-
         // Model matrix
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-        model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+        // model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::rotate(model, glm::radians(20.0f), glm::vec3(1.0f, 0.3f, 0.5f));
 
         // View matrix
         glm::mat4 view = glm::mat4(1.0f);
@@ -286,22 +285,41 @@ int main()
         glm::mat4 projection;
         // FOV, aspect ration, near plane, far plane
         projection = glm::perspective(glm::radians(45.0f), 800.0f/600.0f, 0.1f, 100.0f);
-
+        
+        // Uniform location
+        // Tell OpenGL how many matrices we send
+        // Do we want to transpone the matrix. OpenGL and glm have the same ordering (by column)
+        // Return matrix in representation that OpenGL can work with
         // Send transorm matrices to the shader
-        glUniformMatrix4fv(glGetUniformLocation(shaderProgram.getID(), "model"), 1, GL_FALSE, glm::value_ptr(model));
         glUniformMatrix4fv(glGetUniformLocation(shaderProgram.getID(), "view"), 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(glGetUniformLocation(shaderProgram.getID(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
         glBindVertexArray(VAO);
 
-        // Draw
-        // Primitive type
-        // 
-        // Number of vertices we want to draw
-        // mode - type of primitive
-        // start index
-        // number of vertices
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        for(int i = 0; i < 10; i++)
+        {
+            glm::mat4 model = glm::mat4(1.0f);
+            // model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+            model = glm::translate(model, cubePositions[i]);
+            float angle = 20.0f * i;
+            model = glm::rotate(model, (float)glfwGetTime() * glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+
+            glUniformMatrix4fv(glGetUniformLocation(shaderProgram.getID(), "model"), 1, GL_FALSE, glm::value_ptr(model));
+            // Draw
+            // Primitive type
+            // 
+            // Number of vertices we want to draw
+            // mode - type of primitive
+            // start index
+            // number of vertices
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
+
+        //shaderProgram(vertexColorLocation, 1.0f, 0.5f, blueValue, 1.0f);
+
+        //model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+
+
         // mode - primitive type
         // count - number of elements to draw
         // type - the type of the values in indices
