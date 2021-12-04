@@ -251,6 +251,16 @@ int main()
         // type - the type of the values in indices
         // pointer - offset in a buffer where the indices are stored
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        texture1.Bind(0);
+
+        float sc = glm::sin(glfwGetTime());
+        trans = glm::mat4(1.0f);
+        trans = glm::scale(trans, glm::vec3(sc,sc,sc));
+        trans = glm::translate(trans, glm::vec3(-0.5f, 0.5f, 0.0f));
+        glUniformMatrix4fv(glGetUniformLocation(shaderProgram.getID(), "transform"), 1, GL_FALSE, glm::value_ptr(trans));
+
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         
         // Swap back and front buffers
         glfwSwapBuffers(window);
