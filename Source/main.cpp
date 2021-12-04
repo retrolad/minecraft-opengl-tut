@@ -199,6 +199,20 @@ int main()
     // Or via our shader class
     shaderProgram.setInt("texture2", 1);
 
+    // Model matrix
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
+    // View matrix
+    glm::mat4 view = glm::mat4(1.0f);
+    // Translate the scene forward (same as translating the camera back)
+    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+
+    // Projection matrix
+    glm::mat4 projection;
+    // FOV, aspect ration, near plane, far plane
+    projection = glm::perspective(glm::radians(45.0f), 800.0f/600.0f, 0.1f, 100.0f);
+
     /** RENDER LOOP */
 
     // Render loop
@@ -236,6 +250,13 @@ int main()
         glUniformMatrix4fv(glGetUniformLocation(shaderProgram.getID(), "transform"), 1, GL_FALSE, glm::value_ptr(trans));
         //shaderProgram(vertexColorLocation, 1.0f, 0.5f, blueValue, 1.0f);
 
+        // model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+
+        // Send transorm matrices to the shader
+        glUniformMatrix4fv(glGetUniformLocation(shaderProgram.getID(), "model"), 1, GL_FALSE, glm::value_ptr(model));
+        glUniformMatrix4fv(glGetUniformLocation(shaderProgram.getID(), "view"), 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(glGetUniformLocation(shaderProgram.getID(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
         glBindVertexArray(VAO);
 
         // Draw
@@ -252,15 +273,16 @@ int main()
         // pointer - offset in a buffer where the indices are stored
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-        texture1.Bind(0);
+        // Second object
+        // texture1.Bind(0);
 
-        float sc = glm::sin(glfwGetTime());
-        trans = glm::mat4(1.0f);
-        trans = glm::scale(trans, glm::vec3(sc,sc,sc));
-        trans = glm::translate(trans, glm::vec3(-0.5f, 0.5f, 0.0f));
-        glUniformMatrix4fv(glGetUniformLocation(shaderProgram.getID(), "transform"), 1, GL_FALSE, glm::value_ptr(trans));
+        // float sc = glm::sin(glfwGetTime());
+        // trans = glm::mat4(1.0f);
+        // trans = glm::scale(trans, glm::vec3(sc,sc,sc));
+        // trans = glm::translate(trans, glm::vec3(-0.5f, 0.5f, 0.0f));
+        // glUniformMatrix4fv(glGetUniformLocation(shaderProgram.getID(), "transform"), 1, GL_FALSE, glm::value_ptr(trans));
 
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         
         // Swap back and front buffers
         glfwSwapBuffers(window);
