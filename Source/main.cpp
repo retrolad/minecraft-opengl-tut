@@ -86,6 +86,8 @@ int main()
 
     std::cout << glGetString(GL_VERSION) << std::endl;
 
+    glEnable(GL_DEPTH_TEST);
+
     Shader shaderProgram("../Shaders/VertexShader.glsl", "../Shaders/FragmentShader.glsl");
 
     /** TEXTURE */
@@ -244,7 +246,7 @@ int main()
         // Set color, which will be used to clear buffer
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         // Clear specified buffer
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Bind texture to corresponding textures units
         // Texture units are uniform variables in fragment shader
@@ -305,7 +307,7 @@ int main()
         // type - the type of the values in indices
         // pointer - offset in a buffer where the indices are stored
         // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        
+
         // Swap back and front buffers
         glfwSwapBuffers(window);
         // Process nad handle window and input events
