@@ -199,16 +199,6 @@ int main()
     // Or via our shader class
     shaderProgram.setInt("texture2", 1);
 
-    //glm::mat4 trans = glm::mat4(1.0f);
-    //trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-    //glmTest(trans);
-
-    // Uniform location
-    // Tell OpenGL how many matrices we send
-    // Do we want to transpone the matrix. OpenGL and glm have the same ordering (by column)
-    // Return matrix in representation that OpenGL can work with
-    //glUniformMatrix4fv(glGetUniformLocation(shaderProgram.getID(), "transform"), 1, GL_FALSE, glm::value_ptr(trans));
-
     /** RENDER LOOP */
 
     // Render loop
@@ -226,8 +216,8 @@ int main()
 
         // Bind texture to corresponding textures units
         // Texture units are uniform variables in fragment shader
-        texture1.Bind(0);
-        //texture2.Bind(1);
+        // texture1.Bind(0);
+        texture2.Bind(1);
 
         // Should use this every cycle?
         shaderProgram.use();
@@ -235,7 +225,9 @@ int main()
         float timeValue = glfwGetTime();
         float blueValue = std::sin(timeValue) / 2.0f + 0.5f;
         
+
         glm::mat4 trans = glm::mat4(1.0f);
+        trans = glm::translate(trans, glm::vec3(0.5f, 0.5f, 0.0f));
         trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
         // Uniform location
         // Tell OpenGL how many matrices we send
