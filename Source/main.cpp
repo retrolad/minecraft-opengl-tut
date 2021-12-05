@@ -19,6 +19,9 @@ void processInput(GLFWwindow* window);
 const unsigned int WIN_WIDTH = 800;
 const unsigned int WIN_HEIGHT = 600;
 
+float xViewTranslate = 0.0f;
+float zViewTranslate = -3.0f;
+
 void glmTest(glm::mat4& trans)
 {
     // glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
@@ -277,9 +280,9 @@ int main()
         model = glm::rotate(model, glm::radians(20.0f), glm::vec3(1.0f, 0.3f, 0.5f));
 
         // View matrix
-        glm::mat4 view = glm::mat4(1.0f);
+        // glm::mat4 view = glm::mat4(1.0f);
         // Translate the scene forward (same as translating the camera back)
-        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+        // view = glm::translate(view, glm::vec3(xViewTranslate, 0.0f, zViewTranslate));
 
         // Projection matrix
         glm::mat4 projection;
@@ -291,12 +294,12 @@ int main()
         // Do we want to transpone the matrix. OpenGL and glm have the same ordering (by column)
         // Return matrix in representation that OpenGL can work with
         // Send transorm matrices to the shader
-        glUniformMatrix4fv(glGetUniformLocation(shaderProgram.getID(), "view"), 1, GL_FALSE, glm::value_ptr(view));
+        // glUniformMatrix4fv(glGetUniformLocation(shaderProgram.getID(), "view"), 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(glGetUniformLocation(shaderProgram.getID(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
         glBindVertexArray(VAO);
 
-        for(int i = 0; i < 10; i++)
+        for(int i = 1; i < 10; i++)
         {
             glm::mat4 model = glm::mat4(1.0f);
             // model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -305,6 +308,7 @@ int main()
             model = glm::rotate(model, (float)glfwGetTime() * glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
 
             glUniformMatrix4fv(glGetUniformLocation(shaderProgram.getID(), "model"), 1, GL_FALSE, glm::value_ptr(model));
+
             // Draw
             // Primitive type
             // 
@@ -314,6 +318,15 @@ int main()
             // number of vertices
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
+
+        const float radius = 10.0f;
+        float camX = sin(glfwGetTime()) * radius;
+        float camZ = cos(glfwGetTime()) * radius;
+
+        glm::mat4 view;
+        // Camera position, target position, up vector
+        view = glm::lookAt(glm::vec3(camX, 0.0, camZ), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
+        glUniformMatrix4fv(glGetUniformLocation(shaderProgram.getID(), "view"), 1, GL_FALSE, glm::value_ptr(view));
 
         //shaderProgram(vertexColorLocation, 1.0f, 0.5f, blueValue, 1.0f);
 
@@ -351,5 +364,21 @@ void processInput(GLFWwindow* window)
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
         glfwSetWindowShouldClose(window, true);
+    }
+    else if(glfwGetKey(window, GLFW_KEY_A))
+    {
+        xViewTranslate += 0.01f;
+    }
+    else if(glfwGetKey(window, GLFW_KEY_D))
+    {
+        xViewTranslate -= 0.01f;
+    }
+    else if(glfwGetKey(window, GLFW_KEY_W))
+    {
+        zViewTranslate += 0.01f;
+    }
+    else if(glfwGetKey(window, GLFW_KEY_S))
+    {
+        zViewTranslate -= 0.01f;
     }
 }
