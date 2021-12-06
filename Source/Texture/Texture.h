@@ -1,8 +1,8 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include <string>
 #include <glad/glad.h>
+#include <string>
 
 class Texture
 {
@@ -15,6 +15,7 @@ private:
     // Number of color channels
     int m_BPP;
 public:
+    Texture() = default;
     Texture(const std::string& path);
     ~Texture();
     

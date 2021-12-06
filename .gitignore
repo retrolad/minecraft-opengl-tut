@@ -2,3 +2,5 @@
 workspace.*
 /.vscode
 *.exe
+
+Source/main2.cpp

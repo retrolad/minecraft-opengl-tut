@@ -20,7 +20,9 @@ void main()
 {
     // gl_Position ia a predefined variable
     // This will be output data of vertex shader
-    gl_Position = projection * view * model * vec4(aPos, 1.0);
+    gl_Position = vec4(aPos, 1.0f);
+
+    // gl_Position = projection * view * model * vec4(aPos, 1.0);
     vColor = aColor;
     texCoord = aTexCoord;
 }

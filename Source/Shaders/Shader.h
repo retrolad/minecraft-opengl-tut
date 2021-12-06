@@ -9,7 +9,7 @@ class Shader {
     GLuint ID;
 public:
     // Constructors reads and builds the shader
-    Shader(const std::string& vertexPath, const std::string& fragmentPath);
+    Shader(const std::string& vertexPath = "VertexShader", const std::string& fragmentPath = "FragmentShader");
     ~Shader() = default;
 
     // Use/activate shader

@@ -8,8 +8,8 @@ Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath)
     std::string fragmentCode;
 
     // Get shaders source code from files
-    vertexCode = GetFileContent(vertexPath);
-    fragmentCode = GetFileContent(fragmentPath);
+    vertexCode = GetFileContent("../Shaders/" + vertexPath + ".glsl");
+    fragmentCode = GetFileContent("../Shaders/" + fragmentPath + ".glsl");
 
     // Get 0-terminated source codes
     const GLchar* vsCode = vertexCode.c_str();
