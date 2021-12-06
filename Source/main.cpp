@@ -28,6 +28,12 @@ glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
+// Euler angles for x and y
+float pitch = 0.0f;
+float yaw = -90.0f;
+
+glm::vec3 direction;
+
 float deltaTime = 0.0f; // Time spent to render a frame
 float lastFrame = 0.0f; // Time spent for last frame
 
@@ -300,6 +306,15 @@ int main()
         // view = glm::translate(view, glm::vec3(xViewTranslate, 0.0f, zViewTranslate));
         
         glm::mat4 view;
+        
+        // How much we go along x for yaw (x|z), then scale this value
+        // by how much we go along x for pitch(y|xz)
+        direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+        direction.y = sin(glm::radians(pitch));
+        direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+
+        cameraFront = glm::normalize(direction);
+
         // Camera position, target position, up vector
         view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
         glUniformMatrix4fv(glGetUniformLocation(shaderProgram.getID(), "view"), 1, GL_FALSE, glm::value_ptr(view));
@@ -337,6 +352,7 @@ int main()
             // start index
             // number of vertices
             glDrawArrays(GL_TRIANGLES, 0, 36);
+
         }
 
 
@@ -388,21 +404,29 @@ void processInput(GLFWwindow* window)
     {
         cameraPos -= cameraFront * cameraSpeed;
     }
-    else if(glfwGetKey(window, GLFW_KEY_A))
+    else if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
     {
         // Create right-vector
         cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
     }
-    else if(glfwGetKey(window, GLFW_KEY_D))
+    else if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
     {
         cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
     }
-    else if(glfwGetKey(window, GLFW_KEY_E))
+    else if(glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
     {
-        yViewRotate += 0.001f;
+        yaw += 45.0f * deltaTime;
     }
-    else if(glfwGetKey(window, GLFW_KEY_Q))
+    else if(glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
     {
-        yViewRotate -= 0.001f;
+        yaw -= 45.0f * deltaTime;
+    }
+    else if(glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
+    {
+        pitch -= 45.0f * deltaTime;
+    }
+    else if(glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
+    {
+        pitch += 45.0f * deltaTime;
     }
 }
