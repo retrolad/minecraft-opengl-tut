@@ -15,6 +15,8 @@
 // Also called on window creation with the same dimensions
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
+// Will be called every time mouse is moved
+void handleMouse(GLFWwindow * window, double xPos, double yPos);
 
 const unsigned int WIN_WIDTH = 800;
 const unsigned int WIN_HEIGHT = 600;
@@ -36,6 +38,10 @@ glm::vec3 direction;
 
 float deltaTime = 0.0f; // Time spent to render a frame
 float lastFrame = 0.0f; // Time spent for last frame
+
+// Get mouse pos on prev frame
+float lastX = 400;
+float lastY = 300;
 
 void glmTest(glm::mat4& trans)
 {
@@ -104,8 +110,11 @@ int main()
 
     std::cout << glGetString(GL_VERSION) << std::endl;
 
-    glEnable(GL_DEPTH_TEST);
+    // Hide cursor when app window is focused.
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetCursorPosCallback(window, handleMouse);
 
+    glEnable(GL_DEPTH_TEST);
 
     Shader shaderProgram("../Shaders/VertexShader.glsl", "../Shaders/FragmentShader.glsl");
 
@@ -306,15 +315,6 @@ int main()
         // view = glm::translate(view, glm::vec3(xViewTranslate, 0.0f, zViewTranslate));
         
         glm::mat4 view;
-        
-        // How much we go along x for yaw (x|z), then scale this value
-        // by how much we go along x for pitch(y|xz)
-        direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-        direction.y = sin(glm::radians(pitch));
-        direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-
-        cameraFront = glm::normalize(direction);
-
         // Camera position, target position, up vector
         view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
         glUniformMatrix4fv(glGetUniformLocation(shaderProgram.getID(), "view"), 1, GL_FALSE, glm::value_ptr(view));
@@ -429,4 +429,37 @@ void processInput(GLFWwindow* window)
     {
         pitch += 45.0f * deltaTime;
     }
+}
+
+void handleMouse(GLFWwindow*, double xPos, double yPos)
+{
+    // std::cout << "[" << xPos << "," << yPos << "]" << std::endl;
+
+    // Get how much mouse moved relative to last frame
+    float xOffset = xPos - lastX;
+    float yOffset = lastY - yPos;
+    lastX = xPos;
+    lastY = yPos;
+
+    const float sensitivity = 0.05f;
+    xOffset *= sensitivity;
+    yOffset *= sensitivity;
+
+    // Add offsets to yaw and pitch
+    yaw += xOffset;
+    pitch += yOffset;
+
+    // Restrictions
+    if(pitch > 89.0f) pitch = 89.0f;
+    if(pitch < -89.0f) pitch = -89.0f;
+
+    // Set direction vector
+
+    // How much we go along x for yaw (x|z), then scale this value
+    // by how much we go along x for pitch(y|xz)
+    direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    direction.y = sin(glm::radians(pitch));
+    direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+
+    cameraFront = glm::normalize(direction);
 }
