@@ -43,6 +43,9 @@ float lastFrame = 0.0f; // Time spent for last frame
 float lastX = 400;
 float lastY = 300;
 
+// Is first mouse input
+bool firstMouse = true;
+
 void glmTest(glm::mat4& trans)
 {
     // glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
@@ -434,6 +437,14 @@ void processInput(GLFWwindow* window)
 void handleMouse(GLFWwindow*, double xPos, double yPos)
 {
     // std::cout << "[" << xPos << "," << yPos << "]" << std::endl;
+
+    // Prevent mouse jump when cursor enters the window for the first time
+    if(firstMouse)
+    {
+        lastX = xPos;
+        lastY = yPos;
+        firstMouse = false;
+    }
 
     // Get how much mouse moved relative to last frame
     float xOffset = xPos - lastX;
