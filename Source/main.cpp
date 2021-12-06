@@ -20,7 +20,16 @@ const unsigned int WIN_WIDTH = 800;
 const unsigned int WIN_HEIGHT = 600;
 
 float xViewTranslate = 0.0f;
-float zViewTranslate = -3.0f;
+float zViewTranslate = 3.0f;
+
+float yViewRotate = 0.0f;
+
+glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+
+float deltaTime = 0.0f; // Time spent to render a frame
+float lastFrame = 0.0f; // Time spent for last frame
 
 void glmTest(glm::mat4& trans)
 {
@@ -90,6 +99,7 @@ int main()
     std::cout << glGetString(GL_VERSION) << std::endl;
 
     glEnable(GL_DEPTH_TEST);
+
 
     Shader shaderProgram("../Shaders/VertexShader.glsl", "../Shaders/FragmentShader.glsl");
 
@@ -254,6 +264,10 @@ int main()
     // Render loop
     while(!glfwWindowShouldClose(window))
     {
+        float currentFrame = glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+
         // Input
         processInput(window);
 
@@ -280,9 +294,15 @@ int main()
         model = glm::rotate(model, glm::radians(20.0f), glm::vec3(1.0f, 0.3f, 0.5f));
 
         // View matrix
-        // glm::mat4 view = glm::mat4(1.0f);
+        //glm::mat4 view = glm::mat4(1.0f);
         // Translate the scene forward (same as translating the camera back)
+        //view = glm::rotate(view, yViewRotate, glm::vec3(0.0f, 1.0f, 0.0f));        
         // view = glm::translate(view, glm::vec3(xViewTranslate, 0.0f, zViewTranslate));
+        
+        glm::mat4 view;
+        // Camera position, target position, up vector
+        view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+        glUniformMatrix4fv(glGetUniformLocation(shaderProgram.getID(), "view"), 1, GL_FALSE, glm::value_ptr(view));
 
         // Projection matrix
         glm::mat4 projection;
@@ -305,7 +325,7 @@ int main()
             // model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
             model = glm::translate(model, cubePositions[i]);
             float angle = 20.0f * i;
-            model = glm::rotate(model, (float)glfwGetTime() * glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+            //model = glm::rotate(model, (float)glfwGetTime() * glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
 
             glUniformMatrix4fv(glGetUniformLocation(shaderProgram.getID(), "model"), 1, GL_FALSE, glm::value_ptr(model));
 
@@ -319,19 +339,12 @@ int main()
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
 
-        const float radius = 10.0f;
-        float camX = sin(glfwGetTime()) * radius;
-        float camZ = cos(glfwGetTime()) * radius;
-
-        glm::mat4 view;
-        // Camera position, target position, up vector
-        view = glm::lookAt(glm::vec3(camX, 0.0, camZ), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
-        glUniformMatrix4fv(glGetUniformLocation(shaderProgram.getID(), "view"), 1, GL_FALSE, glm::value_ptr(view));
 
         //shaderProgram(vertexColorLocation, 1.0f, 0.5f, blueValue, 1.0f);
 
         //model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
 
+        // glmTest(view);
 
         // mode - primitive type
         // count - number of elements to draw
@@ -361,24 +374,35 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 void processInput(GLFWwindow* window)
 {
+    // Move camera independent of how fast CPU works
+    const float cameraSpeed = 5.0f * deltaTime;
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
         glfwSetWindowShouldClose(window, true);
     }
+    else if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+    {
+        cameraPos += cameraFront * cameraSpeed;
+    }
+    else if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    {
+        cameraPos -= cameraFront * cameraSpeed;
+    }
     else if(glfwGetKey(window, GLFW_KEY_A))
     {
-        xViewTranslate += 0.01f;
+        // Create right-vector
+        cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
     }
     else if(glfwGetKey(window, GLFW_KEY_D))
     {
-        xViewTranslate -= 0.01f;
+        cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
     }
-    else if(glfwGetKey(window, GLFW_KEY_W))
+    else if(glfwGetKey(window, GLFW_KEY_E))
     {
-        zViewTranslate += 0.01f;
+        yViewRotate += 0.001f;
     }
-    else if(glfwGetKey(window, GLFW_KEY_S))
+    else if(glfwGetKey(window, GLFW_KEY_Q))
     {
-        zViewTranslate -= 0.01f;
+        yViewRotate -= 0.001f;
     }
 }
