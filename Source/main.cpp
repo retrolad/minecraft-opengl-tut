@@ -17,6 +17,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 // Will be called every time mouse is moved
 void handleMouse(GLFWwindow * window, double xPos, double yPos);
+void handleScroll(GLFWwindow* window, double xOffset, double yOffset);
 
 const unsigned int WIN_WIDTH = 800;
 const unsigned int WIN_HEIGHT = 600;
@@ -45,6 +46,8 @@ float lastY = 300;
 
 // Is first mouse input
 bool firstMouse = true;
+
+float fov = 45.0f;
 
 void glmTest(glm::mat4& trans)
 {
@@ -116,6 +119,7 @@ int main()
     // Hide cursor when app window is focused.
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPosCallback(window, handleMouse);
+    glfwSetScrollCallback(window, handleScroll);
 
     glEnable(GL_DEPTH_TEST);
 
@@ -325,7 +329,7 @@ int main()
         // Projection matrix
         glm::mat4 projection;
         // FOV, aspect ration, near plane, far plane
-        projection = glm::perspective(glm::radians(45.0f), 800.0f/600.0f, 0.1f, 100.0f);
+        projection = glm::perspective(glm::radians(fov), 800.0f/600.0f, 0.1f, 100.0f);
         
         // Uniform location
         // Tell OpenGL how many matrices we send
@@ -473,4 +477,16 @@ void handleMouse(GLFWwindow*, double xPos, double yPos)
     direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 
     cameraFront = glm::normalize(direction);
+}
+
+void handleScroll(GLFWwindow* window, double xOffset, double yOffset)
+{
+    std::cout << fov << std::endl;
+
+    if(fov >= 1.0f && fov <= 45.0f)
+        fov -= yOffset;
+    else if(fov <= 1.0f)
+        fov = 1.0f;
+    else if(fov >= 45.0f)
+        fov = 45.0f;
 }
