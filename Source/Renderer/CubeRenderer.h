@@ -3,6 +3,7 @@
 
 #include "Shaders/Shader.h"
 #include "Texture/Texture.h"
+#include "../Model.h"
 
 class CubeRenderer
 {
@@ -13,6 +14,7 @@ public:
 private:
     Shader m_shader;
     Texture m_texture;
+    Model m_model;
 
     GLuint m_vao;
 };
