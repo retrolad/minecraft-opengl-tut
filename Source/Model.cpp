@@ -1,5 +1,13 @@
 #include "Model.h"
 
+Model::~Model()
+{
+    glDeleteVertexArrays(1, &m_vao);
+    glDeleteBuffers(m_buffers.size(), m_buffers.data());
+
+    m_buffers.clear();
+}
+
 void Model::construct(const std::vector<GLfloat>& vertexPositions, 
                       const std::vector<GLfloat>& textureCoords,
                       const std::vector<GLuint>& indices)
@@ -21,6 +29,8 @@ void Model::addVBO(const std::vector<GLfloat>& data, int dim)
 
     glVertexAttribPointer(m_vboCount, dim, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
     glEnableVertexAttribArray(m_vboCount++);    
+
+    m_buffers.push_back(vbo);
 }
 
 void Model::addEBO(const std::vector<GLuint>& indices)

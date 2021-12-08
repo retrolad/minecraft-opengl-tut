@@ -8,6 +8,7 @@ class Model
 {
 public:
     Model() = default;
+    ~Model();
     void construct(const std::vector<GLfloat>& vertexPositions, 
                    const std::vector<GLfloat>& textureCoords,
                    const std::vector<GLuint>& indices);
@@ -16,6 +17,7 @@ public:
 private:
     GLuint m_vao = 0;    
     int m_vboCount = 0;
+    std::vector<GLuint> m_buffers;
 };
 
 #endif 
