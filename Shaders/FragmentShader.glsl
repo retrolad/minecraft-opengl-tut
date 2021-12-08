@@ -12,10 +12,10 @@ uniform sampler2D texture2;
 
 void main()
 {
-    FragColor = vec4(1.0, 0.5, 0.2, 1.0);
-    // FragColor = vec4(vColor, 1.0);
+    // FragColor = vec4(1.0, 0.5, 0.2, 1.0);
+    // FragColor = vec4(texCoord, 1.0, 1.0);
     // texture function samples texture color
-    // FragColor = texture(texture1, texCoord);
+    FragColor = texture(texture1, texCoord);
 
     // mix is used to interpolate color between multiple textures
     // the third argument decides in which proportions interpolation will

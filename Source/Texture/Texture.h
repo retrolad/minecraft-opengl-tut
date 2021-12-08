@@ -18,7 +18,9 @@ public:
     Texture() = default;
     Texture(const std::string& path);
     ~Texture();
-    
+
+    void loadFromFile(const std::string& path);
+
     void Bind(unsigned int slot = 0) const;
     void Unbind() const;
 

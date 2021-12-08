@@ -5,6 +5,17 @@
 Texture::Texture(const std::string& path)
     : m_FilePath(path), m_Width(0), m_Height(0)
 {
+    loadFromFile(path);
+}
+
+Texture::~Texture()
+{
+    // Delete texture from the gpu
+    glDeleteTextures(1, &m_id);
+}
+
+void Texture::loadFromFile(const std::string& path)
+{
     // Flip image to show up properly 
     stbi_set_flip_vertically_on_load(true);
 
@@ -56,15 +67,9 @@ Texture::Texture(const std::string& path)
     
 }
 
-Texture::~Texture()
-{
-    // Delete texture from the gpu
-    glDeleteTextures(1, &m_id);
-}
-
 void Texture::Bind(unsigned int slot) const
 {
-    // Activate texture at slot <slot>>
+    // Activate texture at slot <slot>
     glActiveTexture(GL_TEXTURE + slot);
     glBindTexture(GL_TEXTURE_2D, m_id);
 }
