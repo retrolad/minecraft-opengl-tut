@@ -71,6 +71,9 @@ Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath)
      // Delete shader objets, as we don't need them anymore
     glDeleteShader(vertexShaderID);
     glDeleteShader(fragmentShaderID);
+
+    m_locationProjectionViewMatrix = glGetUniformLocation(ID, "projectionView");
+    m_locationModelMatrix = glGetUniformLocation(ID, "model");
 }
 
 void Shader::use()
@@ -97,4 +100,14 @@ void Shader::setFloat(const std::string& name, float value) const
 GLuint Shader::getID() const
 {
     return ID;
+}
+
+void Shader::setProjectionViewMatrix(const glm::mat4& projMatrix)
+{
+    glUniformMatrix4fv(m_locationProjectionViewMatrix, 1, GL_FALSE, glm::value_ptr(projMatrix));
+}
+
+void Shader::setModelMatrix(const glm::mat4& modelMatrix)
+{
+    glUniformMatrix4fv(m_locationModelMatrix, 1, GL_FALSE, glm::value_ptr(modelMatrix));
 }

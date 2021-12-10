@@ -4,12 +4,13 @@
 #include "Shaders/Shader.h"
 #include "Texture/Texture.h"
 #include "../Model.h"
+#include "../Camera.h"
 
 class CubeRenderer
 {
 public:
     CubeRenderer();
-    void render();
+    void render(const Camera& camera);
 
 private:
     Shader m_shader;

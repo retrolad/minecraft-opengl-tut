@@ -7,7 +7,7 @@
 class Renderer
 {
 public:
-    void EndFrame(GLFWwindow* window);
+    void EndFrame(GLFWwindow* window, const Camera& camera);
 private:
     CubeRenderer cubeRenderer;
 };

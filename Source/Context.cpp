@@ -17,7 +17,7 @@ Context::Context()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // Create window object and its associated context
-    window = glfwCreateWindow(800, 600, "Minecraft OpenGL", NULL, NULL);
+    window = glfwCreateWindow(1280, 720, "Minecraft OpenGL", NULL, NULL);
 
     if(window == NULL)
     {
@@ -41,7 +41,7 @@ Context::Context()
     // From lower-left corner with width and height
     // OpenGL will map its normalized device coordinates (from -1 to 1) 
     // to the window coordinates (0,0)
-    glViewport(0, 0, 800, 600);
+    glViewport(0, 0, 1280, 720);
 
     glEnable(GL_DEPTH_TEST);
 }

@@ -11,7 +11,7 @@ uniform mat4 transform;
 
 uniform mat4 model;
 uniform mat4 view;
-uniform mat4 projection; 
+uniform mat4 projectionView; 
 
 out vec2 texCoord;
 out vec3 vColor;
@@ -20,7 +20,7 @@ void main()
 {
     // gl_Position ia a predefined variable
     // This will be output data of vertex shader
-    gl_Position = vec4(aPos, 1.0f);
+    gl_Position = projectionView * vec4(aPos, 1.0f);
 
     // gl_Position = projection * view * model * vec4(aPos, 1.0);
     texCoord = aTexCoord;
