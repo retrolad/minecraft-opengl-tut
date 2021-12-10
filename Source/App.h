@@ -4,11 +4,12 @@
 #include "Renderer/Renderer.h"
 #include "Context.h"
 #include "Camera.h"
+#include "Player/Player.h"
 
 class App
 {
 public:
-    App() = default;
+    App();
 
     void run();
     void handleEvents(float deltaTime);
@@ -18,6 +19,8 @@ private:
     Context m_context;
     Renderer m_renderer;    
     Camera m_camera;
+
+    Player m_player;
 };
 
 #endif

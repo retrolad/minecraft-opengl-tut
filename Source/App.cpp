@@ -2,6 +2,10 @@
 
 #include <iostream>
 
+App::App()
+{
+     m_camera.bindEntity(m_player);
+}
 
 void App::run()
 {
@@ -16,9 +20,13 @@ void App::run()
         float deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
-        handleEvents(deltaTime);
+        m_player.handleInput(m_context.window);
+        m_player.update(deltaTime);
         m_camera.update();
+        
         m_renderer.EndFrame(m_context.window, m_camera);
+        
+        handleEvents(deltaTime);
     }
 }
 
@@ -28,22 +36,6 @@ void App::handleEvents(float deltaTime)
     if(isKeyPressed(GLFW_KEY_ESCAPE))
     {
         glfwSetWindowShouldClose(m_context.window, true);
-    }
-    if(isKeyPressed(GLFW_KEY_W))
-    {
-        m_camera.processInput(FORWARD, deltaTime);
-    }
-    if(isKeyPressed(GLFW_KEY_S))
-    {
-        m_camera.processInput(BACKWARD, deltaTime);
-    }
-    if(isKeyPressed(GLFW_KEY_D))
-    {
-        m_camera.processInput(RIGHT, deltaTime);
-    }
-    if(isKeyPressed(GLFW_KEY_A))
-    {
-        m_camera.processInput(LEFT, deltaTime);
     }
 }
 
