@@ -13,7 +13,7 @@ class Player : public Entity
         void handleInput(GLFWwindow* window);
         
         void keyboardInput(GLFWwindow* window);
-        void mouseInput();
+        void mouseInput(GLFWwindow* window);
 
         void update(float deltaTime);
 

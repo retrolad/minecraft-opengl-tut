@@ -43,6 +43,7 @@ Context::Context()
     // to the window coordinates (0,0)
     glViewport(0, 0, 1280, 720);
 
+    // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glEnable(GL_DEPTH_TEST);
 }
 

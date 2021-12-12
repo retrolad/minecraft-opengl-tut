@@ -1,8 +1,11 @@
 #include "Player.h"
 
+#include <iostream>
+
 Player::Player()
 {
     position  = {0, 0, 3};
+    rotation  = {-90, 0, 0};
     front     = {0, 0, -1};
     up        = {0, 1, 0};
     right     = glm::cross(front, up);
@@ -14,11 +17,14 @@ void Player::update(float deltaTime)
     right = glm::normalize(glm::cross(front, up));
 
     m_direction = {0,0,0};
+
+    // std::cout << "[" << front.x << "," << front.y << "," << front.z << "]" << std::endl; 
 }
 
 void Player::handleInput(GLFWwindow* window)
 {
     keyboardInput(window);
+    mouseInput(window);
 }
 
 void Player::keyboardInput(GLFWwindow* window)
@@ -40,9 +46,38 @@ void Player::keyboardInput(GLFWwindow* window)
     {
         m_direction -= right * speed;
     }
+    if(glfwGetKey(window, GLFW_KEY_I))
+    {
+        double xPos, yPos;
+        glfwGetCursorPos(window, &xPos, &yPos);
+        std::cout << "[" << xPos << "," << yPos << "]" << std::endl;
+    }
 }
 
-void Player::mouseInput()
+void Player::mouseInput(GLFWwindow* window)
 {
+    double xPos, yPos;
+    glfwGetCursorPos(window, &xPos, &yPos);
+    static double lastX = xPos, lastY = yPos;
 
-}
+    double xOffset = xPos - lastX;
+    double yOffset = lastY - yPos;
+
+    rotation.x += xOffset * 0.05f;
+    rotation.y += yOffset * 0.05f;
+
+    if(rotation.y > 80.0f) rotation.y = 80.0f;
+    if(rotation.y < -80.0f) rotation.y = -80.0f;
+
+    if(rotation.x > 180.0f) rotation.x = -180.0f;
+    if(rotation.x < -180.0f) rotation.x = 180.0f;
+
+    front.x = cos(glm::radians(rotation.x));// * cos(glm::radians(rotation.y)));
+    front.y = sin(glm::radians(rotation.y));
+    front.z = sin(glm::radians(rotation.x));// * cos(glm::radians(rotation.y)));
+
+    front = glm::normalize(front);
+
+    glfwSetCursorPos(window, 640, 360);
+    glfwGetCursorPos(window, &lastX, &lastY);
+}   
