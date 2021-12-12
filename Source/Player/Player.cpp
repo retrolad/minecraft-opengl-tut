@@ -59,6 +59,7 @@ void Player::mouseInput(GLFWwindow* window)
     double xPos, yPos;
     glfwGetCursorPos(window, &xPos, &yPos);
     static double lastX = xPos, lastY = yPos;
+    static const double BOUND = 89.0f;
 
     double xOffset = xPos - lastX;
     double yOffset = lastY - yPos;
@@ -66,8 +67,8 @@ void Player::mouseInput(GLFWwindow* window)
     rotation.x += xOffset * 0.05f;
     rotation.y += yOffset * 0.05f;
 
-    if(rotation.y > 80.0f) rotation.y = 80.0f;
-    if(rotation.y < -80.0f) rotation.y = -80.0f;
+    if(rotation.y > BOUND) rotation.y = BOUND;
+    if(rotation.y < -BOUND) rotation.y = -BOUND;
 
     if(rotation.x > 180.0f) rotation.x = -180.0f;
     if(rotation.x < -180.0f) rotation.x = 180.0f;

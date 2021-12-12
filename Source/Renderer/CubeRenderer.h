@@ -18,6 +18,7 @@ private:
     Model m_model;
 
     GLuint m_vao;
+    GLuint indicesCount;
 };
 
 #endif

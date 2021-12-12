@@ -43,8 +43,17 @@ Context::Context()
     // to the window coordinates (0,0)
     glViewport(0, 0, 1280, 720);
 
-    // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    // Disable cursor
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    
+    // Enable depth buffer (Z buffer)
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+    // Cull back faces
+    glCullFace(GL_BACK);
+
+    // Set frame limit
+    glfwSwapInterval(1);
 }
 
 Context::~Context()

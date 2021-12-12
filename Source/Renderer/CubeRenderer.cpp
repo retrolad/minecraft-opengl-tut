@@ -8,24 +8,118 @@ CubeRenderer::CubeRenderer()
 {
     m_texture.loadFromFile("../Resources/Textures/brick.jpg");
 
-    m_model.construct(
-        {
-            0.5f, 0.5f, 0.0f,
-            0.5f, -0.5f, 0.0f,
-            -0.5f, -0.5f, 0.0f,
-            -0.5f, 0.5f, 0.0f
-        },
-        {
-            1.0f, 1.0f,
-            1.0f, 0.0f,
-            0.0f, 0.0f,
-            0.0f, 1.0f
-        },
-        {
-            0, 1, 2,
-            0, 2, 3
-        }
-    );
+    std::vector<GLfloat> vertexPositions = {
+
+        // Back
+        1, 0, 0,
+        0, 0, 0,
+        0, 1, 0,
+        1, 1 ,0,
+
+        // Front 
+        0, 0, 1,
+        1, 0, 1,
+        1, 1, 1,
+        0, 1, 1,
+
+        // Bottom 
+        0, 0, 0, 
+        1, 0, 0,
+        1, 0, 1,
+        0, 0, 1,
+
+        // Upper 
+        0, 1, 1,
+        1, 1, 1,
+        1, 1, 0,
+        0, 1, 0,
+
+        // Left 
+        0, 0, 0, 
+        0, 0, 1,
+        0, 1, 1,
+        0, 1, 0,
+
+        // Right
+        1, 0, 1,
+        1, 0, 0,
+        1, 1, 0,
+        1, 1, 1
+    };
+
+    std::vector<GLfloat> textureCoords = {
+        0, 0,
+        1, 0,
+        1, 1,
+        0, 1,
+
+        0, 0,
+        1, 0,
+        1, 1,
+        0, 1,
+
+        0, 0,
+        1, 0,
+        1, 1,
+        0, 1,
+
+        0, 0,
+        1, 0,
+        1, 1,
+        0, 1,
+
+        0, 0,
+        1, 0,
+        1, 1,
+        0, 1,
+
+        0, 0,
+        1, 0,
+        1, 1,
+        0, 1,
+    };
+
+    std::vector<GLuint> indices = {
+        0, 1, 2,
+        2, 3, 0,
+
+        4, 5, 6,
+        6, 7, 4,  
+    
+        8, 9, 10,
+        10, 11, 8,
+
+        12, 13, 14,
+        14, 15, 12,
+
+        16, 17, 18,
+        18, 19, 16, 
+    
+        20, 21, 22,
+        22, 23, 20
+    };
+
+    m_model.construct(vertexPositions, textureCoords, indices);
+
+    indicesCount = indices.size();
+    // m_model.construct(
+    //     {
+    //         0.5f, 0.5f, 0.0f,
+    //         0.5f, -0.5f, 0.0f,
+    //         -0.5f, -0.5f, 0.0f,
+    //         -0.5f, 0.5f, 0.0f
+    //     },
+    //     {
+    //         1.0f, 1.0f,
+    //         1.0f, 0.0f,
+    //         0.0f, 0.0f,
+    //         0.0f, 1.0f
+    //     },
+    //     {
+    //         0, 1, 2,
+    //         0, 2, 3
+    //     }
+    // );
 
 }
 
@@ -41,5 +135,5 @@ void CubeRenderer::render(const Camera& camera)
 
     m_shader.setProjectionViewMatrix(camera.getProjectionMatrix() * camera.getViewMatrix());
     
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+    glDrawElements(GL_TRIANGLES, indicesCount, GL_UNSIGNED_INT, nullptr);
 }
