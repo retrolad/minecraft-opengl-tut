@@ -5,8 +5,9 @@
 #include <glfw/glfw3.h>
 
 CubeRenderer::CubeRenderer()
+   : m_textureAtlas("DefaultPack.png")
 {
-    m_texture.loadFromFile("../Resources/Textures/brick.jpg");
+    m_texture.loadFromFile("brick.jpg");
 
     std::vector<GLfloat> vertexPositions = {
 
@@ -47,37 +48,51 @@ CubeRenderer::CubeRenderer()
         1, 1, 1
     };
 
-    std::vector<GLfloat> textureCoords = {
-        0, 0,
-        1, 0,
-        1, 1,
-        0, 1,
+    std::vector<GLfloat> textureCoords;
 
-        0, 0,
-        1, 0,
-        1, 1,
-        0, 1,
+    auto top = m_textureAtlas.getTexture({0,0});
+    auto side = m_textureAtlas.getTexture({1,0});
+    auto bottom = m_textureAtlas.getTexture({2,0});
 
-        0, 0,
-        1, 0,
-        1, 1,
-        0, 1,
+    textureCoords.insert(textureCoords.end(), side.begin(), side.end());
+    textureCoords.insert(textureCoords.end(), side.begin(), side.end());
+    textureCoords.insert(textureCoords.end(), bottom.begin(), bottom.end());
+    textureCoords.insert(textureCoords.end(), top.begin(), top.end());
+    textureCoords.insert(textureCoords.end(), side.begin(), side.end());
+    textureCoords.insert(textureCoords.end(), side.begin(), side.end());
 
-        0, 0,
-        1, 0,
-        1, 1,
-        0, 1,
+    
+    // std::vector<GLfloat> textureCoords = {
+    //     0, 0,
+    //     1, 0,
+    //     1, 1,
+    //     0, 1,
 
-        0, 0,
-        1, 0,
-        1, 1,
-        0, 1,
+    //     0, 0,
+    //     1, 0,
+    //     1, 1,
+    //     0, 1,
 
-        0, 0,
-        1, 0,
-        1, 1,
-        0, 1,
-    };
+    //     0, 0,
+    //     1, 0,
+    //     1, 1,
+    //     0, 1,
+
+    //     0, 0,
+    //     1, 0,
+    //     1, 1,
+    //     0, 1,
+
+    //     0, 0,
+    //     1, 0,
+    //     1, 1,
+    //     0, 1,
+
+    //     0, 0,
+    //     1, 0,
+    //     1, 1,
+    //     0, 1,
+    // };
 
     std::vector<GLuint> indices = {
         0, 1, 2,
@@ -102,31 +117,12 @@ CubeRenderer::CubeRenderer()
     m_model.construct(vertexPositions, textureCoords, indices);
 
     indicesCount = indices.size();
-    // m_model.construct(
-    //     {
-    //         0.5f, 0.5f, 0.0f,
-    //         0.5f, -0.5f, 0.0f,
-    //         -0.5f, -0.5f, 0.0f,
-    //         -0.5f, 0.5f, 0.0f
-    //     },
-    //     {
-    //         1.0f, 1.0f,
-    //         1.0f, 0.0f,
-    //         0.0f, 0.0f,
-    //         0.0f, 1.0f
-    //     },
-    //     {
-    //         0, 1, 2,
-    //         0, 2, 3
-    //     }
-    // );
-
 }
 
 void CubeRenderer::render(const Camera& camera)
 {
     m_shader.use();
-    m_texture.Bind(0);
+    m_textureAtlas.Bind(0);
     // TODO bind vao
 
     // glm::mat4 view = glm::mat4(1.0f);

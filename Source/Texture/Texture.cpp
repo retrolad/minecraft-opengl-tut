@@ -25,7 +25,7 @@ void Texture::loadFromFile(const std::string& path)
     glBindTexture(GL_TEXTURE_2D, m_id);
     
     // Load image
-    m_Buffer = stbi_load(path.c_str(), &m_Width, &m_Height, &m_BPP, 4);
+    m_Buffer = stbi_load(("../Resources/Textures/" + path).c_str(), &m_Width, &m_Height, &m_BPP, 4);
 
     // Texture wrapping (x,y wrapping)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -33,8 +33,8 @@ void Texture::loadFromFile(const std::string& path)
 
     // Texture filtering
     // Use linear interpolation between the two closest mipmaps
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     if(!m_Buffer)
     {
