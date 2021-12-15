@@ -6,7 +6,7 @@
 #include "../Model.h"
 #include "../Camera.h"
 #include "../Texture/TextureAtlas.h"
-#include "../World/Block/BlockData.h"
+#include "../World/Block/BlockTypes/BlockType.h"
 
 class CubeRenderer
 {
@@ -16,14 +16,13 @@ public:
 
 private:
     Shader m_shader;
-    Texture m_texture;
     Model m_model;
 
     GLuint m_vao;
     GLuint indicesCount;
 
     TextureAtlas m_textureAtlas;
-    BlockData m_data;
+    DefaultBlock m_block;
 };
 
 #endif

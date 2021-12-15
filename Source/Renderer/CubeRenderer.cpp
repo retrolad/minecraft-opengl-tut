@@ -9,10 +9,8 @@ class BlockDataStorage;
 
 CubeRenderer::CubeRenderer()
    : m_textureAtlas("DefaultPack.png"),
-     m_data("Grass")
+     m_block("Grass")
 {
-    m_texture.loadFromFile("brick.jpg");
-
     std::vector<GLfloat> vertexPositions = {
 
         // Back
@@ -54,9 +52,9 @@ CubeRenderer::CubeRenderer()
 
     std::vector<GLfloat> textureCoords;
 
-    auto top = m_textureAtlas.getTexture({m_data.getBlockData().topCoords.x, m_data.getBlockData().topCoords.y});
-    auto side = m_textureAtlas.getTexture({m_data.getBlockData().sideCoords.x, m_data.getBlockData().sideCoords.y});
-    auto bottom = m_textureAtlas.getTexture({m_data.getBlockData().bottomCoords.x, m_data.getBlockData().bottomCoords.y});
+    auto top = m_textureAtlas.getTexture({m_block.getData().getBlockData().topCoords.x, m_block.getData().getBlockData().topCoords.y});
+    auto side = m_textureAtlas.getTexture({m_block.getData().getBlockData().sideCoords.x, m_block.getData().getBlockData().sideCoords.y});
+    auto bottom = m_textureAtlas.getTexture({m_block.getData().getBlockData().bottomCoords.x, m_block.getData().getBlockData().bottomCoords.y});
 
     textureCoords.insert(textureCoords.end(), side.begin(), side.end());
     textureCoords.insert(textureCoords.end(), side.begin(), side.end());
