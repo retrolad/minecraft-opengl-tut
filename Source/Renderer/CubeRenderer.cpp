@@ -1,4 +1,6 @@
 #include "CubeRenderer.h"
+#include "World/Block/BlockDatabase.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -8,8 +10,7 @@
 class BlockDataStorage;
 
 CubeRenderer::CubeRenderer()
-   : m_textureAtlas("DefaultPack.png"),
-     m_block("Grass")
+   : m_textureAtlas("DefaultPack.png")
 {
     std::vector<GLfloat> vertexPositions = {
 
@@ -52,9 +53,9 @@ CubeRenderer::CubeRenderer()
 
     std::vector<GLfloat> textureCoords;
 
-    auto top = m_textureAtlas.getTexture({m_block.getData().getBlockData().topCoords.x, m_block.getData().getBlockData().topCoords.y});
-    auto side = m_textureAtlas.getTexture({m_block.getData().getBlockData().sideCoords.x, m_block.getData().getBlockData().sideCoords.y});
-    auto bottom = m_textureAtlas.getTexture({m_block.getData().getBlockData().bottomCoords.x, m_block.getData().getBlockData().bottomCoords.y});
+    auto top = m_textureAtlas.getTexture({BlockDatabase::get().getData(BlockId::Grass).getBlockData().topCoords.x, BlockDatabase::get().getData(BlockId::Grass).getBlockData().topCoords.y});
+    auto side = m_textureAtlas.getTexture({BlockDatabase::get().getData(BlockId::Grass).getBlockData().sideCoords.x, BlockDatabase::get().getData(BlockId::Grass).getBlockData().sideCoords.y});
+    auto bottom = m_textureAtlas.getTexture({BlockDatabase::get().getData(BlockId::Grass).getBlockData().bottomCoords.x, BlockDatabase::get().getData(BlockId::Grass).getBlockData().bottomCoords.y});
 
     textureCoords.insert(textureCoords.end(), side.begin(), side.end());
     textureCoords.insert(textureCoords.end(), side.begin(), side.end());

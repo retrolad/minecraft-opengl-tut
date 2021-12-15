@@ -22,7 +22,6 @@ private:
     GLuint indicesCount;
 
     TextureAtlas m_textureAtlas;
-    DefaultBlock m_block;
 };
 
 #endif
