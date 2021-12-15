@@ -9,7 +9,7 @@ class TextureAtlas : public Texture
     public:
         TextureAtlas(const std::string& fileName);
 
-        std::vector<GLfloat> getTexture(const std::vector<GLuint>& coords);
+        std::vector<GLfloat> getTexture(const std::vector<GLint>& coords);
 
     private:
         int m_imageSize = 256;

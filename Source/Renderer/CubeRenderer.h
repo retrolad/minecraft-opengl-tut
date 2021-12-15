@@ -6,6 +6,7 @@
 #include "../Model.h"
 #include "../Camera.h"
 #include "../Texture/TextureAtlas.h"
+#include "../World/Block/BlockData.h"
 
 class CubeRenderer
 {
@@ -22,6 +23,7 @@ private:
     GLuint indicesCount;
 
     TextureAtlas m_textureAtlas;
+    BlockData m_data;
 };
 
 #endif

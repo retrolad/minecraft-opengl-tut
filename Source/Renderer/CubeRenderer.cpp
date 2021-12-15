@@ -3,9 +3,13 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glfw/glfw3.h>
+#include <iostream>
+
+class BlockDataStorage;
 
 CubeRenderer::CubeRenderer()
-   : m_textureAtlas("DefaultPack.png")
+   : m_textureAtlas("DefaultPack.png"),
+     m_data("Grass")
 {
     m_texture.loadFromFile("brick.jpg");
 
@@ -50,9 +54,9 @@ CubeRenderer::CubeRenderer()
 
     std::vector<GLfloat> textureCoords;
 
-    auto top = m_textureAtlas.getTexture({0,0});
-    auto side = m_textureAtlas.getTexture({1,0});
-    auto bottom = m_textureAtlas.getTexture({2,0});
+    auto top = m_textureAtlas.getTexture({m_data.getBlockData().topCoords.x, m_data.getBlockData().topCoords.y});
+    auto side = m_textureAtlas.getTexture({m_data.getBlockData().sideCoords.x, m_data.getBlockData().sideCoords.y});
+    auto bottom = m_textureAtlas.getTexture({m_data.getBlockData().bottomCoords.x, m_data.getBlockData().bottomCoords.y});
 
     textureCoords.insert(textureCoords.end(), side.begin(), side.end());
     textureCoords.insert(textureCoords.end(), side.begin(), side.end());
@@ -61,7 +65,6 @@ CubeRenderer::CubeRenderer()
     textureCoords.insert(textureCoords.end(), side.begin(), side.end());
     textureCoords.insert(textureCoords.end(), side.begin(), side.end());
 
-    
     // std::vector<GLfloat> textureCoords = {
     //     0, 0,
     //     1, 0,
