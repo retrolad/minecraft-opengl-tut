@@ -7,8 +7,6 @@
 #include <glfw/glfw3.h>
 #include <iostream>
 
-class BlockDataStorage;
-
 CubeRenderer::CubeRenderer()
    : m_textureAtlas("DefaultPack.png")
 {
@@ -116,9 +114,7 @@ CubeRenderer::CubeRenderer()
         22, 23, 20
     };
 
-    m_model.construct(vertexPositions, textureCoords, indices);
-
-    indicesCount = indices.size();
+    m_model.construct({vertexPositions, textureCoords, indices});
 }
 
 void CubeRenderer::render(const Camera& camera)
@@ -133,5 +129,5 @@ void CubeRenderer::render(const Camera& camera)
 
     m_shader.setProjectionViewMatrix(camera.getProjectionMatrix() * camera.getViewMatrix());
     
-    glDrawElements(GL_TRIANGLES, indicesCount, GL_UNSIGNED_INT, nullptr);
+    glDrawElements(GL_TRIANGLES, m_model.getIndicesCount(), GL_UNSIGNED_INT, nullptr);
 }

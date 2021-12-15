@@ -1,22 +1,26 @@
 #ifndef MODEL_H
 #define MODEL_H
 
-#include <glad/glad.h>
-#include <vector>
+#include "Mesh.h"
 
 class Model
 {
 public:
     Model() = default;
+    Model(const Mesh& mesh);
+
     ~Model();
-    void construct(const std::vector<GLfloat>& vertexPositions, 
-                   const std::vector<GLfloat>& textureCoords,
-                   const std::vector<GLuint>& indices);
+    
+    void construct(const Mesh& mesh);
+
     void addVBO(const std::vector<GLfloat>& data, int dim);
     void addEBO(const std::vector<GLuint>& indices);
+
+    int getIndicesCount() const;
 private:
-    GLuint m_vao = 0;    
-    int m_vboCount = 0;
+    GLuint m_vao        = 0;    
+    GLuint m_indicesCount = 0;
+    int m_vboCount      = 0;
     std::vector<GLuint> m_buffers;
 };
 

@@ -1,5 +1,10 @@
 #include "Model.h"
 
+Model::Model(const Mesh& mesh)
+{
+    construct(mesh);
+}
+
 Model::~Model()
 {
     glDeleteVertexArrays(1, &m_vao);
@@ -8,16 +13,16 @@ Model::~Model()
     m_buffers.clear();
 }
 
-void Model::construct(const std::vector<GLfloat>& vertexPositions, 
-                      const std::vector<GLfloat>& textureCoords,
-                      const std::vector<GLuint>& indices)
+void Model::construct(const Mesh& mesh)
 {
     glGenVertexArrays(1, &m_vao);
     glBindVertexArray(m_vao);
 
-    addVBO(vertexPositions, 3);
-    addVBO(textureCoords, 2);
-    addEBO(indices);
+    addVBO(mesh.vertexPositions, 3);
+    addVBO(mesh.textureCoords, 2);
+    addEBO(mesh.indices);
+
+    m_indicesCount = mesh.indices.size();
 }
 
 void Model::addVBO(const std::vector<GLfloat>& data, int dim)
@@ -39,4 +44,9 @@ void Model::addEBO(const std::vector<GLuint>& indices)
     glGenBuffers(1, &ebo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
+}
+
+int Model::getIndicesCount() const
+{
+    return m_indicesCount;
 }
