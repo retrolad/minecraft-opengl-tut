@@ -1,8 +1,8 @@
 #ifndef CHUNKMESH_H
 #define CHUNKMESH_H
 
-#include "../Model.h"
-#include "../Mesh.h"
+#include "../../Model.h"
+#include "../../Mesh.h"
 
 class ChunkMesh
 {
