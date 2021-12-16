@@ -77,19 +77,35 @@ void ChunkMeshBuilder::buildMesh(ChunkMesh& mesh)
 
         auto textureCoords = BlockDatabase::get().m_textureAtlas.getTexture(data->topCoords);
         
-        tryAddFace(frontFace,  data->sideCoords, {x, y, z});
-        tryAddFace(backFace,   data->sideCoords, {x, y, z});
-        tryAddFace(topFace,    data->topCoords,  {x, y, z});
-        tryAddFace(bottomFace, data->sideCoords, {x, y, z});
-        tryAddFace(leftFace,   data->sideCoords, {x, y, z});
-        tryAddFace(rightFace,  data->sideCoords, {x, y, z});
+        Texel top;
+        Texel side;
+        Texel bottom = data->bottomCoords;
+
+        if(y < CHUNK_SIZE-1)
+        {
+            side = data->bottomCoords;
+            top  = data->bottomCoords;
+        }
+        else 
+        {
+            side = data->sideCoords;
+            top  = data->topCoords;
+        }
+
+        tryAddFace(bottomFace, bottom, m_pChunk->getLocation(), {x, y, z});
+        tryAddFace(topFace,    top,    m_pChunk->getLocation(), {x, y, z});
+        tryAddFace(frontFace,  side,   m_pChunk->getLocation(), {x, y, z});
+        tryAddFace(backFace,   side,   m_pChunk->getLocation(), {x, y, z});
+        tryAddFace(leftFace,   side,   m_pChunk->getLocation(), {x, y, z});
+        tryAddFace(rightFace,  side,   m_pChunk->getLocation(), {x, y, z});
     }    
 }
 
 void ChunkMeshBuilder::tryAddFace(const std::vector<GLfloat>& blockFace,
                                   const glm::ivec2& textureCoords,
+                                  const glm::ivec3& chunkPosition,
                                   const glm::ivec3& blockPosition)
 {   
     auto texCoords = BlockDatabase::get().m_textureAtlas.getTexture(textureCoords);
-    m_pMesh->addFace(blockFace, texCoords, {0,0,0}, blockPosition);
+    m_pMesh->addFace(blockFace, texCoords, {0, 0, 0}, blockPosition);
 }

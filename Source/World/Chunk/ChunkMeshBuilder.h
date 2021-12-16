@@ -17,6 +17,7 @@ class ChunkMeshBuilder
         void buildMesh(ChunkMesh& mesh);
         void tryAddFace(const std::vector<GLfloat>& blockFace,
                         const glm::ivec2& textureCoords,
+                        const glm::ivec3& chunkPosition,
                         const glm::ivec3& blockPosition);
 
         private:
