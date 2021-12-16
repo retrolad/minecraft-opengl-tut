@@ -4,3 +4,4 @@ workspace.*
 *.exe
 
 Source/main2.cpp
+Resources/Textures/pash.jpg

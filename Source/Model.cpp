@@ -7,10 +7,7 @@ Model::Model(const Mesh& mesh)
 
 Model::~Model()
 {
-    glDeleteVertexArrays(1, &m_vao);
-    glDeleteBuffers(m_buffers.size(), m_buffers.data());
-
-    m_buffers.clear();
+    deleteData();
 }
 
 void Model::construct(const Mesh& mesh)
@@ -49,4 +46,16 @@ void Model::addEBO(const std::vector<GLuint>& indices)
 int Model::getIndicesCount() const
 {
     return m_indicesCount;
+}
+
+void Model::deleteData()
+{
+    glDeleteVertexArrays(1, &m_vao);
+    glDeleteBuffers(m_buffers.size(), m_buffers.data());
+
+    m_buffers.clear();
+
+    m_vboCount     = 0;
+    m_vao          = 0;
+    m_indicesCount = 0;
 }

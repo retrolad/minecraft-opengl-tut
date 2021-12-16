@@ -22,7 +22,10 @@ void App::run()
 
         m_player.handleInput(m_context.window);
         m_player.update(deltaTime);
-        m_camera.update();
+        m_camera.update();  
+        for(int i = 0; i < 100; i++)
+            for(int j = 0; j < 100; j++)
+                m_renderer.drawCube({j, 0, -i});
         m_renderer.EndFrame(m_context.window, m_camera);
         
         handleEvents(deltaTime);

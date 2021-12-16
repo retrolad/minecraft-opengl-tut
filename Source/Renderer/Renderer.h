@@ -7,9 +7,10 @@
 class Renderer
 {
 public:
+    void drawCube(const glm::vec3& pos);
     void EndFrame(GLFWwindow* window, const Camera& camera);
 private:
-    CubeRenderer cubeRenderer;
+    CubeRenderer m_cubeRenderer;
 };
 
 #endif

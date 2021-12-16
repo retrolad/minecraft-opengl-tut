@@ -4,7 +4,7 @@
 
 Player::Player()
 {
-    position  = {0, 0, 3};
+    position  = {0, 3, 3};
     rotation  = {-90, 0, 0};
     front     = {0, 0, -1};
     up        = {0, 1, 0};
@@ -29,7 +29,11 @@ void Player::handleInput(GLFWwindow* window)
 
 void Player::keyboardInput(GLFWwindow* window)
 {
-    const float speed = 5.0f;
+    float speed = 5.0f;
+    if(glfwGetKey(window, GLFW_KEY_LEFT_SHIFT))
+    {
+        speed = 10.0f;
+    }
     if(glfwGetKey(window, GLFW_KEY_W))
     {
         m_direction += front * speed;

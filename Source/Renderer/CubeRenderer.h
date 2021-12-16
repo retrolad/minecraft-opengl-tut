@@ -12,15 +12,17 @@ class CubeRenderer
 {
 public:
     CubeRenderer();
+
     void render(const Camera& camera);
 
+    void add(const glm::vec3& pos);
+    
 private:
     Shader m_shader;
     Model m_model;
-
-    GLuint m_vao;
-
     TextureAtlas m_textureAtlas;
+
+    std::vector<glm::vec3> m_cubes;
 };
 
 #endif

@@ -33,6 +33,14 @@ BlockData::BlockData(const std::string& fileName)
             ifstrm >> x >> y;   
             m_data.bottomCoords = {x,y};
         }
+        else if(line == "All")
+        {
+            int x,y;
+            ifstrm >> x >> y;   
+            m_data.topCoords = {x,y};
+            m_data.sideCoords = {x,y};
+            m_data.bottomCoords = {x,y};
+        }
     }
 }
 

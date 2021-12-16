@@ -127,7 +127,21 @@ void CubeRenderer::render(const Camera& camera)
     // view = glm::translate(view, glm::vec3(0.0f, 0.0f, -5.0f + 3*sin(glfwGetTime())));
     // glUniformMatrix4fv(glGetUniformLocation(m_shader.getID(), "view"), 1, GL_FALSE, glm::value_ptr(view));
 
-    m_shader.setProjectionViewMatrix(camera.getProjectionMatrix() * camera.getViewMatrix());
+    for(int i = 0; i < m_cubes.size(); i++)
+    {
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, m_cubes[i]);
+
+        m_shader.setModelMatrix(model);
+        m_shader.setProjectionViewMatrix(camera.getProjectionMatrix() * camera.getViewMatrix());
     
-    glDrawElements(GL_TRIANGLES, m_model.getIndicesCount(), GL_UNSIGNED_INT, nullptr);
+        glDrawElements(GL_TRIANGLES, m_model.getIndicesCount(), GL_UNSIGNED_INT, nullptr);
+    }
+
+    m_cubes.clear();
+}
+
+void CubeRenderer::add(const glm::vec3& pos)
+{
+    m_cubes.push_back(pos);
 }

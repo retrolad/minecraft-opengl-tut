@@ -3,6 +3,7 @@
 BlockDatabase::BlockDatabase()
 {
     m_blocks[(int)BlockId::Grass] = std::make_unique<DefaultBlock>("Grass");
+    m_blocks[(int)BlockId::Dirt]  = std::make_unique<DefaultBlock>("Dirt");  
 }
 
 BlockDatabase& BlockDatabase::get()
