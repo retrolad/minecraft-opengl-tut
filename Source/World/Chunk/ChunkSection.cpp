@@ -1,6 +1,7 @@
 #include "ChunkSection.h"
 
 ChunkSection::ChunkSection()
+: m_location({0,0,0})
 {
 
 }

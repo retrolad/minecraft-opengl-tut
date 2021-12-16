@@ -107,5 +107,5 @@ void ChunkMeshBuilder::tryAddFace(const std::vector<GLfloat>& blockFace,
                                   const glm::ivec3& blockPosition)
 {   
     auto texCoords = BlockDatabase::get().m_textureAtlas.getTexture(textureCoords);
-    m_pMesh->addFace(blockFace, texCoords, {0, 0, 0}, blockPosition);
+    m_pMesh->addFace(blockFace, texCoords, chunkPosition, blockPosition);
 }
