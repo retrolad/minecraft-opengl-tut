@@ -2,9 +2,16 @@
 
 #include <iostream>
 
+#include "World/Chunk/ChunkMeshBuilder.h"
+
 App::App()
 {
-     m_camera.bindEntity(m_player);
+    m_camera.bindEntity(m_player);
+
+    ChunkMeshBuilder builder(m_chunk);
+    builder.buildMesh(m_chunk.m_mesh);
+
+    m_chunk.m_mesh.createModel();
 }
 
 void App::run()
@@ -23,9 +30,9 @@ void App::run()
         m_player.handleInput(m_context.window);
         m_player.update(deltaTime);
         m_camera.update();  
-        for(int i = 0; i < 100; i++)
-            for(int j = 0; j < 100; j++)
-                m_renderer.drawCube({j, 0, -i});
+
+        m_renderer.drawChunk(m_chunk.m_mesh);
+
         m_renderer.EndFrame(m_context.window, m_camera);
         
         handleEvents(deltaTime);

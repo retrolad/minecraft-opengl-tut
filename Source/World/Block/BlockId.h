@@ -7,7 +7,8 @@ typedef uint8_t Block_t;
 
 enum class BlockId : Block_t 
 {
-    Grass = 0,
+    Void = 0,
+    Grass,
     Dirt,
 
     NTYPES

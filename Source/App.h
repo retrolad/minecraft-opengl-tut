@@ -5,6 +5,7 @@
 #include "Context.h"
 #include "Camera.h"
 #include "Player/Player.h"
+#include "World/Chunk/ChunkSection.h"
 
 class App
 {
@@ -21,6 +22,8 @@ private:
     Camera m_camera;
 
     Player m_player;
+
+    ChunkSection m_chunk;
 };
 
 #endif

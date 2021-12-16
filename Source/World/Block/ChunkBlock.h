@@ -16,6 +16,11 @@ struct ChunkBlock
     const BlockData& getData() const;
     const BlockType& getType() const;
 
+    bool operator==(const ChunkBlock& other) const
+    {
+        return id == other.id;
+    }
+
     Block_t id = 1;
 };
 

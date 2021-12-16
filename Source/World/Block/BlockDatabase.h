@@ -3,7 +3,9 @@
 
 #include "BlockId.h"
 #include "BlockTypes/BlockType.h"
-#include "../Utils/Singleton.h"
+#include "../../Utils/Singleton.h"
+#include "../../Texture/TextureAtlas.h"
+
 
 #include <array>
 #include <memory>
@@ -16,6 +18,7 @@ class BlockDatabase : Singleton
         const BlockType& getBlock(BlockId id) const;
         const BlockData& getData (BlockId id)  const;
 
+        TextureAtlas m_textureAtlas;
     private:
         BlockDatabase();
 

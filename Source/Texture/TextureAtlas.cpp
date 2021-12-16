@@ -5,7 +5,7 @@ TextureAtlas::TextureAtlas(const std::string& fileName)
     loadFromFile(fileName);
 }
 
-std::vector<GLfloat> TextureAtlas::getTexture(const std::vector<GLint>& coords)
+std::vector<GLfloat> TextureAtlas::getTexture(const glm::ivec2& coords)
 {
     const static GLfloat TEXTURE_SIZE = (GLfloat)m_subTextureSize / (GLfloat)m_imageSize;
 

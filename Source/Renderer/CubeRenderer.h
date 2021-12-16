@@ -1,5 +1,5 @@
-#ifndef CUBE_RENDERER_H
-#define CUBE_RENDERER_H
+#ifndef CUBERENDERER_H
+#define CUBERENDERER_H
 
 #include "Shaders/Shader.h"
 #include "Texture/Texture.h"
