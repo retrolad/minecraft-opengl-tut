@@ -11,12 +11,14 @@
 class ChunkSection
 {
     public:
-        ChunkSection();
+        ChunkSection(glm::ivec3 pos = {0,0,0});
+        // ChunkSection(glm::ivec3 pos);
 
         void setBlock       (int x, int y, int z, ChunkBlock block);
         ChunkBlock getBlock (int x, int y, int z) const;
 
         const glm::ivec3 getLocation() const;
+        void setLocation(int x, int y, int z);
 
         ChunkMesh m_mesh;
     private:

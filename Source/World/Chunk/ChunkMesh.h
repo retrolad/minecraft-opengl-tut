@@ -18,12 +18,14 @@ class ChunkMesh
 
         void createModel();
         const Model& getModel() const;
+        int getVerticesCount() const;
 
     private:
         Mesh  m_mesh;
         Model m_model;
 
         GLuint m_indiceIdx = 0;
+        GLuint m_verticesCount = 0;
 };
 
 #endif

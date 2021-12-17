@@ -48,6 +48,11 @@ int Model::getIndicesCount() const
     return m_indicesCount;
 }
 
+void Model::bindVAO() const
+{
+    glBindVertexArray(m_vao);
+}
+
 void Model::deleteData()
 {
     glDeleteVertexArrays(1, &m_vao);

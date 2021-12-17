@@ -23,7 +23,8 @@ private:
 
     Player m_player;
 
-    ChunkSection m_chunk;
+    // ChunkSection m_chunk;
+    std::array<ChunkSection, CHUNK_SIZE> m_chunks;
 };
 
 #endif

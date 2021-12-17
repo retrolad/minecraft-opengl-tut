@@ -1,10 +1,15 @@
 #include "ChunkSection.h"
 
-ChunkSection::ChunkSection()
-: m_location({0,0,0})
+ChunkSection::ChunkSection(glm::ivec3 pos)
+: m_location(pos)
 {
 
 }
+
+// ChunkSection::ChunkSection(glm::ivec3 pos)
+// {
+
+// }
 
 void ChunkSection::setBlock(int x, int y, int z, ChunkBlock chunk)
 {
@@ -37,4 +42,9 @@ int ChunkSection::getIndex(int x, int y, int z)
 const glm::ivec3 ChunkSection::getLocation() const
 {
     return m_location;
+}
+
+void ChunkSection::setLocation(int x, int y, int z)
+{
+    m_location = {x, y, z};
 }

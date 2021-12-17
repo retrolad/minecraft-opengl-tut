@@ -44,6 +44,7 @@ void ChunkMesh::addFace(const std::vector<GLfloat>& blockFace,
     });
 
     m_indiceIdx += 4;
+    m_verticesCount += 4;
 }
 
 void ChunkMesh::createModel()
@@ -54,4 +55,9 @@ void ChunkMesh::createModel()
 const Model& ChunkMesh::getModel() const 
 {
     return m_model;
+}
+
+int ChunkMesh::getVerticesCount() const
+{
+    return m_verticesCount;
 }

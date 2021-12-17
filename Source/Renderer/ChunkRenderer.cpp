@@ -18,8 +18,6 @@ void ChunkRenderer::add(const ChunkMesh& mesh)
 
 void ChunkRenderer::render(const Camera& camera)
 {
-    // std::cout << "Chunk rendering..." << std::endl;
-
     m_shader.use();
     BlockDatabase::get().m_textureAtlas.Bind();
 
@@ -27,7 +25,11 @@ void ChunkRenderer::render(const Camera& camera)
     m_shader.setProjectionViewMatrix(camera.getProjectionMatrix() * 
                                      camera.getViewMatrix());
 
-    glDrawElements(GL_TRIANGLES, m_chunks[0]->getModel().getIndicesCount(), GL_UNSIGNED_INT, nullptr);
+    for(int i = 0; i < m_chunks.size(); i++)
+    {
+        m_chunks[i]->getModel().bindVAO();
+        glDrawElements(GL_TRIANGLES, m_chunks[i]->getModel().getIndicesCount(), GL_UNSIGNED_INT, nullptr);
+    }
 
     m_chunks.clear();
 }
