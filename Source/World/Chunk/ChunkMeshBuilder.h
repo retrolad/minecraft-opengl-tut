@@ -17,12 +17,14 @@ class ChunkMeshBuilder
         void buildMesh(ChunkMesh& mesh);
         void tryAddFace(const std::vector<GLfloat>& blockFace,
                         const glm::ivec2& textureCoords,
-                        const glm::ivec3& chunkPosition,
-                        const glm::ivec3& blockPosition);
+                        const glm::ivec3& blockPosition,
+                        const glm::ivec3& facing);
 
         private:
             ChunkSection* m_pChunk;
             ChunkMesh*    m_pMesh;
+
+            static int meshId;
 };
 
 #endif 

@@ -30,23 +30,23 @@ void Player::handleInput(GLFWwindow* window)
 void Player::keyboardInput(GLFWwindow* window)
 {
     float speed = 5.0f;
-    if(glfwGetKey(window, GLFW_KEY_LEFT_SHIFT))
+    if(glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) || glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT))
     {
         speed = 10.0f;
     }
-    if(glfwGetKey(window, GLFW_KEY_W))
+    if(glfwGetKey(window, GLFW_KEY_W) || glfwGetKey(window, GLFW_KEY_UP))
     {
         m_direction += front * speed;
     }
-    if(glfwGetKey(window, GLFW_KEY_S))
+    if(glfwGetKey(window, GLFW_KEY_S) || glfwGetKey(window, GLFW_KEY_DOWN))
     {
         m_direction -= front * speed;
     }
-    if(glfwGetKey(window, GLFW_KEY_D))
+    if(glfwGetKey(window, GLFW_KEY_D) || glfwGetKey(window, GLFW_KEY_RIGHT))
     {
         m_direction += right * speed;
     }
-    if(glfwGetKey(window, GLFW_KEY_A))
+    if(glfwGetKey(window, GLFW_KEY_A) || glfwGetKey(window, GLFW_KEY_LEFT))
     {
         m_direction -= right * speed;
     }
@@ -54,7 +54,9 @@ void Player::keyboardInput(GLFWwindow* window)
     {
         double xPos, yPos;
         glfwGetCursorPos(window, &xPos, &yPos);
-        std::cout << "[" << xPos << "," << yPos << "]" << std::endl;
+        std::cout << "Cursor position: " << "[" << xPos << "," << yPos << "]" << std::endl;
+        std::cout << "Camera rotation: " << "[" << rotation.x << "," << rotation.y << "," << rotation.z << "]\n";
+        std::cout << "Camera direction: " << "[" << front.x << "," << front.y << "," << front.z << "]\n";
     }
 }
 
@@ -63,7 +65,7 @@ void Player::mouseInput(GLFWwindow* window)
     double xPos, yPos;
     glfwGetCursorPos(window, &xPos, &yPos);
     static double lastX = xPos, lastY = yPos;
-    static const double BOUND = 89.0f;
+    static const double VERTICAL_BOUND = 80.0f;
 
     double xOffset = xPos - lastX;
     double yOffset = lastY - yPos;
@@ -71,15 +73,15 @@ void Player::mouseInput(GLFWwindow* window)
     rotation.x += xOffset * 0.05f;
     rotation.y += yOffset * 0.05f;
 
-    if(rotation.y > BOUND) rotation.y = BOUND;
-    if(rotation.y < -BOUND) rotation.y = -BOUND;
+    if(rotation.y > VERTICAL_BOUND) rotation.y = VERTICAL_BOUND;
+    if(rotation.y < -VERTICAL_BOUND) rotation.y = -VERTICAL_BOUND;
 
     if(rotation.x > 180.0f) rotation.x = -180.0f;
     if(rotation.x < -180.0f) rotation.x = 180.0f;
 
-    front.x = cos(glm::radians(rotation.x));// * cos(glm::radians(rotation.y)));
+    front.x = cos(glm::radians(rotation.x)) * cos(glm::radians(rotation.y));
     front.y = sin(glm::radians(rotation.y));
-    front.z = sin(glm::radians(rotation.x));// * cos(glm::radians(rotation.y)));
+    front.z = sin(glm::radians(rotation.x)) * cos(glm::radians(rotation.y));
 
     front = glm::normalize(front);
 

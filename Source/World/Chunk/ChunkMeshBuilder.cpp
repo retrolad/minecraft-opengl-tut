@@ -6,6 +6,8 @@
 #include "../Block/BlockDatabase.h"
 
 #include <vector>
+#include <iostream>
+#include <GLFW/glfw3.h>
 
 namespace
 {
@@ -56,6 +58,8 @@ namespace
 
 }
 
+int ChunkMeshBuilder::meshId = 1;
+
 ChunkMeshBuilder::ChunkMeshBuilder(ChunkSection& chunk)
 : m_pChunk(&chunk)
 {
@@ -64,18 +68,22 @@ ChunkMeshBuilder::ChunkMeshBuilder(ChunkSection& chunk)
 
 void ChunkMeshBuilder::buildMesh(ChunkMesh& mesh)
 {
+    auto start = glfwGetTime();
     m_pMesh = &mesh;
 
     for(int y = 0; y < CHUNK_SIZE; y++)
     for(int x = 0; x < CHUNK_SIZE; x++)
     for(int z = 0; z < CHUNK_SIZE; z++)
     {
+        // ChunkBlock at pos (x,y,z) of this chunk section
         auto block = m_pChunk->getBlock(x, y, z);
         if(block == 0) continue;
 
+        // ChunkBlock uses BlockDatabase to retrieve the actual block
+        // by chunk block's id
+        // getData()                  -> BlockData&
+        // BlockData().getBlockData() -> BlockDataStorage&
         auto data = &block.getData().getBlockData();
-
-        auto textureCoords = BlockDatabase::get().m_textureAtlas.getTexture(data->topCoords);
         
         Texel top;
         Texel side;
@@ -92,20 +100,27 @@ void ChunkMeshBuilder::buildMesh(ChunkMesh& mesh)
             top  = data->topCoords;
         }
 
-        tryAddFace(bottomFace, bottom, m_pChunk->getLocation(), {x, y, z});
-        tryAddFace(topFace,    top,    m_pChunk->getLocation(), {x, y, z});
-        tryAddFace(frontFace,  side,   m_pChunk->getLocation(), {x, y, z});
-        tryAddFace(backFace,   side,   m_pChunk->getLocation(), {x, y, z});
-        tryAddFace(leftFace,   side,   m_pChunk->getLocation(), {x, y, z});
-        tryAddFace(rightFace,  side,   m_pChunk->getLocation(), {x, y, z});
-    }    
+        // Try to add each face of the block to the mesh
+        tryAddFace(bottomFace, bottom,{x, y, z}, {x,   y-1, z});
+        tryAddFace(topFace,    top,   {x, y, z}, {x,   y+1, z});
+        tryAddFace(frontFace,  side,  {x, y, z}, {x,   y,   z+1});
+        tryAddFace(backFace,   side,  {x, y, z}, {x,   y,   z-1});
+        tryAddFace(leftFace,   side,  {x, y, z}, {x-1, y,   z});
+        tryAddFace(rightFace,  side,  {x, y, z}, {x+1, y,   z});
+    }
+
+    auto end = glfwGetTime();
+    std::cout << "[Mesh " << meshId++ << "] built in: " << (end - start) * 1000 << "ms\n";    
 }
 
 void ChunkMeshBuilder::tryAddFace(const std::vector<GLfloat>& blockFace,
                                   const glm::ivec2& textureCoords,
-                                  const glm::ivec3& chunkPosition,
-                                  const glm::ivec3& blockPosition)
+                                  const glm::ivec3& blockPosition,
+                                  const glm::ivec3& facing)
 {   
-    auto texCoords = BlockDatabase::get().m_textureAtlas.getTexture(textureCoords);
-    m_pMesh->addFace(blockFace, texCoords, chunkPosition, blockPosition);
+    if(m_pChunk->getBlock(facing.x, facing.y, facing.z) == BlockId::Void)
+    {
+        auto texCoords = BlockDatabase::get().m_textureAtlas.getTexture(textureCoords);
+        m_pMesh->addFace(blockFace, texCoords, m_pChunk->getLocation(), blockPosition);
+    }
 }
