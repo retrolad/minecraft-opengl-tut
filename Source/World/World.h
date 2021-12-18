@@ -12,7 +12,7 @@ class World
 
         void renderWorld(Renderer& renderer);
     private:
-        Chunk m_chunk;
+        std::vector<Chunk> m_chunks;
 };
 
 #endif

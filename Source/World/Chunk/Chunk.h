@@ -8,12 +8,15 @@ class Renderer;
 class Chunk
 {
     public:
-        Chunk();
+        Chunk(const glm::ivec2& location);
+
+        void makeMeshes();
 
         void drawChunks(Renderer& renderer);
 
     private:
-        std::vector<ChunkSection> m_chunks;
+        std::vector<ChunkSection>   m_chunks;
+        glm::ivec2                  m_location;
 };
 
 #endif

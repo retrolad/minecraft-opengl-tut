@@ -3,16 +3,22 @@
 #include "ChunkMeshBuilder.h"
 #include "../../Renderer/Renderer.h"
 
-Chunk::Chunk()
+Chunk::Chunk(const glm::ivec2& location)
+: m_location(location)
 {
-    for(int i = 0; i < 8; i++)
+    for(int y = 0; y < 3; y++)
     {
-        m_chunks.emplace_back(glm::ivec3(i, 0, 0));
-        auto& chunk = m_chunks.back();
+        m_chunks.emplace_back(glm::ivec3(location.x, y, location.y));
+    }
+}
 
-        ChunkMeshBuilder builder(m_chunks.back());
-        builder.buildMesh(m_chunks.back().m_mesh);
-        m_chunks.back().m_mesh.createModel();
+void Chunk::makeMeshes()
+{
+    for(auto& chunk : m_chunks)
+    {
+        ChunkMeshBuilder builder(chunk);
+        builder.buildMesh(chunk.m_mesh);
+        chunk.m_mesh.createModel();
     }
 }
 

@@ -1,7 +1,7 @@
 #include "ChunkSection.h"
 
-ChunkSection::ChunkSection(glm::ivec3 pos)
-: m_location(pos)
+ChunkSection::ChunkSection(glm::ivec3 location)
+: m_location(location)
 {
 
 }

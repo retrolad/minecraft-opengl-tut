@@ -11,7 +11,7 @@
 class ChunkSection
 {
     public:
-        ChunkSection(glm::ivec3 pos = {0,0,0});
+        ChunkSection(glm::ivec3 location = {0,0,0});
         // ChunkSection(glm::ivec3 pos);
 
         void setBlock       (int x, int y, int z, ChunkBlock block);
