@@ -7,22 +7,6 @@
 App::App()
 {
     m_camera.bindEntity(m_player);
-
-    GLuint verN = 0;
-    for(int x = 0; x < 4; x++)
-    for(int z = 0; z < 4; z++)
-    {
-        auto& chunk = m_chunks[x*4+z];
-        chunk.setLocation(x, 0, z);
-        ChunkMeshBuilder builder(chunk);
-        builder.buildMesh(chunk.m_mesh);
-        
-        chunk.m_mesh.createModel();
-
-        verN += chunk.m_mesh.getVerticesCount(); 
-    }
-
-    std::cout << "Vertices count: [" << verN << "]" << std::endl; 
 }
 
 void App::run()
@@ -41,12 +25,7 @@ void App::run()
         m_player.handleInput(m_context.window);
         m_player.update(deltaTime);
         m_camera.update();  
-
-        for(int i = 0; i < m_chunks.size(); i++)
-        {
-            m_renderer.drawChunk(m_chunks[i].m_mesh);
-        }
-
+        m_world.renderWorld(m_renderer);
         m_renderer.EndFrame(m_context.window, m_camera);
         
         handleEvents(deltaTime);

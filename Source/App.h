@@ -6,6 +6,7 @@
 #include "Camera.h"
 #include "Player/Player.h"
 #include "World/Chunk/ChunkSection.h"
+#include "World/World.h"
 
 class App
 {
@@ -25,6 +26,7 @@ private:
 
     // ChunkSection m_chunk;
     std::array<ChunkSection, CHUNK_SIZE> m_chunks;
+    World m_world;
 };
 
 #endif

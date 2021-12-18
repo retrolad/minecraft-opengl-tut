@@ -1,8 +1,35 @@
 #include "Model.h"
 
+#include "Utils/rtexcept.h"
+
 Model::Model(const Mesh& mesh)
 {
     construct(mesh);
+}
+
+Model::Model(Model&& other)
+:   m_vao           (other.m_vao)
+,   m_vboCount      (other.m_vboCount)
+,   m_indicesCount  (other.m_indicesCount)
+,   m_buffers       (std::move(other.m_buffers))
+{
+    other.m_vao             = 0;
+    other.m_vboCount        = 0;
+    other.m_indicesCount    = 0;
+}
+
+Model& Model::operator=(Model&& other)
+{
+    m_vao = other.m_vao;
+    m_vboCount = other.m_vboCount;
+    m_indicesCount = other.m_indicesCount;
+    m_buffers = std::move(other.m_buffers);
+
+    other.m_vao             = 0;
+    other.m_vboCount        = 0;
+    other.m_indicesCount    = 0;
+
+    return *this;
 }
 
 Model::~Model()
@@ -12,8 +39,8 @@ Model::~Model()
 
 void Model::construct(const Mesh& mesh)
 {
-    glGenVertexArrays(1, &m_vao);
-    glBindVertexArray(m_vao);
+    GL(glGenVertexArrays(1, &m_vao));
+    GL(glBindVertexArray(m_vao));
 
     addVBO(mesh.vertexPositions, 3);
     addVBO(mesh.textureCoords, 2);

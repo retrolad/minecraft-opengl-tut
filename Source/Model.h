@@ -11,6 +11,9 @@ public:
 
     ~Model();
     
+    Model(Model&& other);
+    Model& operator=(Model&& other);
+
     void construct(const Mesh& mesh);
 
     void addVBO(const std::vector<GLfloat>& data, int dim);

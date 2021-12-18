@@ -54,7 +54,7 @@ void Player::keyboardInput(GLFWwindow* window)
     {
         double xPos, yPos;
         glfwGetCursorPos(window, &xPos, &yPos);
-        std::cout << "Cursor position: " << "[" << xPos << "," << yPos << "]" << std::endl;
+        std::cout << "Player position: " << "[" << position.x << "," << position.y << "," << position.z << "]\n";
         std::cout << "Camera rotation: " << "[" << rotation.x << "," << rotation.y << "," << rotation.z << "]\n";
         std::cout << "Camera direction: " << "[" << front.x << "," << front.y << "," << front.z << "]\n";
     }
