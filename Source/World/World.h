@@ -10,6 +10,8 @@ class World
     public:
         World();
 
+        ChunkBlock getBlock(int x, int y, int z) const;
+
         void renderWorld(Renderer& renderer);
     private:
         std::vector<Chunk> m_chunks;

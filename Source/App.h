@@ -25,7 +25,6 @@ private:
     Player m_player;
 
     // ChunkSection m_chunk;
-    std::array<ChunkSection, CHUNK_SIZE> m_chunks;
     World m_world;
 };
 

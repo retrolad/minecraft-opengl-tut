@@ -8,10 +8,12 @@
 
 #include <array>
 
+class World;
+
 class ChunkSection
 {
     public:
-        ChunkSection(glm::ivec3 location = {0,0,0});
+        ChunkSection(glm::ivec3 location, World& world);
         // ChunkSection(glm::ivec3 pos);
 
         void setBlock       (int x, int y, int z, ChunkBlock block);
@@ -25,9 +27,13 @@ class ChunkSection
         static bool outOfBounds (int value);
         static int  getIndex    (int x, int y, int z);
 
+        glm::ivec3 toWorldPosition(int x, int y, int z) const;
+
         std::array<ChunkBlock, CHUNK_VOLUME> m_blocks;
 
         glm::ivec3 m_location;
+
+        World* m_pWorld;
 };
 
 #endif 

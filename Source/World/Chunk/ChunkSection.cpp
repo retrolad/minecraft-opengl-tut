@@ -1,7 +1,10 @@
 #include "ChunkSection.h"
 
-ChunkSection::ChunkSection(glm::ivec3 location)
-: m_location(location)
+#include "../World.h"
+
+ChunkSection::ChunkSection(glm::ivec3 location, World& world)
+: m_location(location),
+  m_pWorld   (&world)
 {
 
 }
@@ -22,9 +25,13 @@ void ChunkSection::setBlock(int x, int y, int z, ChunkBlock chunk)
 
 ChunkBlock ChunkSection::getBlock(int x, int y, int z) const 
 {
-    if(outOfBounds(x)) return BlockId::Void;
-    if(outOfBounds(y)) return BlockId::Void;
-    if(outOfBounds(z)) return BlockId::Void;
+    if(outOfBounds(x) ||
+       outOfBounds(y) ||
+       outOfBounds(z))
+    {
+        auto location = toWorldPosition(x, y, z);
+        return m_pWorld->getBlock(location.x, location.y, location.z);
+    } 
 
     return m_blocks[getIndex(x, y, z)];
 }
@@ -37,6 +44,16 @@ bool ChunkSection::outOfBounds(int value)
 int ChunkSection::getIndex(int x, int y, int z)
 {
     return y * CHUNK_AREA + z * CHUNK_SIZE + x;
+}
+
+glm::ivec3 ChunkSection::toWorldPosition(int x, int y, int z) const
+{
+    return 
+    {
+        m_location.x * CHUNK_SIZE + x,
+        m_location.y * CHUNK_SIZE + y,
+        m_location.z * CHUNK_SIZE + z
+    };
 }
 
 const glm::ivec3 ChunkSection::getLocation() const
