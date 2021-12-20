@@ -4,8 +4,8 @@
 
 Player::Player()
 {
-    position  = {0, 3, 3};
-    rotation  = {-90, 0, 0};
+    position  = {-1, 3, -1};
+    rotation  = {0, 0, 0};
     front     = {0, 0, -1};
     up        = {0, 1, 0};
     right     = glm::cross(front, up);

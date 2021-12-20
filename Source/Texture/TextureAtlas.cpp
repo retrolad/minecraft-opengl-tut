@@ -17,7 +17,7 @@ std::vector<GLfloat> TextureAtlas::getTexture(const glm::ivec2& coords)
 
     return {
         xMin, yMin,
-        xMax, yMin,
+        xMax, yMin, 
         xMax, yMax,
         xMin, yMax 
     };

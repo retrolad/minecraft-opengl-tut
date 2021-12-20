@@ -77,36 +77,21 @@ void ChunkMeshBuilder::buildMesh(ChunkMesh& mesh)
     {
         // ChunkBlock at pos (x,y,z) of this chunk section
         auto block = m_pChunk->getBlock(x, y, z);
-        if(block == 0) continue;
+        if(block == BlockId::Void) continue;
 
         // ChunkBlock uses BlockDatabase to retrieve the actual block
         // by chunk block's id
         // getData()                  -> BlockData&
         // BlockData().getBlockData() -> BlockDataStorage&
         auto data = &block.getData().getBlockData();
-        
-        Texel top;
-        Texel side;
-        Texel bottom = data->bottomCoords;
-
-        if(y < CHUNK_SIZE-1)
-        {
-            side = data->bottomCoords;
-            top  = data->bottomCoords;
-        }
-        else 
-        {
-            side = data->sideCoords;
-            top  = data->topCoords;
-        }
 
         // Try to add each face of the block to the mesh
-        tryAddFace(bottomFace, bottom,{x, y, z}, {x,   y-1, z});
-        tryAddFace(topFace,    top,   {x, y, z}, {x,   y+1, z});
-        tryAddFace(frontFace,  side,  {x, y, z}, {x,   y,   z+1});
-        tryAddFace(backFace,   side,  {x, y, z}, {x,   y,   z-1});
-        tryAddFace(leftFace,   side,  {x, y, z}, {x-1, y,   z});
-        tryAddFace(rightFace,  side,  {x, y, z}, {x+1, y,   z});
+        tryAddFace(bottomFace, data->bottomCoords, {x, y, z}, {x,   y-1, z});
+        tryAddFace(topFace,    data->topCoords,    {x, y, z}, {x,   y+1, z});
+        tryAddFace(frontFace,  data->sideCoords,   {x, y, z}, {x,   y,   z+1});
+        tryAddFace(backFace,   data->sideCoords,   {x, y, z}, {x,   y,   z-1});
+        tryAddFace(leftFace,   data->sideCoords,   {x, y, z}, {x-1, y,   z});
+        tryAddFace(rightFace,  data->sideCoords,   {x, y, z}, {x+1, y,   z});
     }
 
     auto end = glfwGetTime();

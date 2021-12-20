@@ -3,6 +3,7 @@
 BlockDatabase::BlockDatabase()
 : m_textureAtlas("DefaultPack.png")
 {
+    m_blocks[(int)BlockId::Void] = std::make_unique<DefaultBlock>("Void");
     m_blocks[(int)BlockId::Grass] = std::make_unique<DefaultBlock>("Grass");
     m_blocks[(int)BlockId::Dirt]  = std::make_unique<DefaultBlock>("Dirt");  
 }
