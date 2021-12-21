@@ -25,10 +25,12 @@ void ChunkRenderer::render(const Camera& camera)
     m_shader.setProjectionViewMatrix(camera.getProjectionMatrix() * 
                                      camera.getViewMatrix());
 
-    for(int i = 0; i < m_chunks.size(); i++)
+    for(const ChunkMesh* mesh : m_chunks)
     {
-        m_chunks[i]->getModel().bindVAO();
-        glDrawElements(GL_TRIANGLES, m_chunks[i]->getModel().getIndicesCount(), GL_UNSIGNED_INT, nullptr);
+        const ChunkMesh& m = *mesh;
+
+        m.getModel().bindVAO();
+        glDrawElements(GL_TRIANGLES, m.getModel().getIndicesCount(), GL_UNSIGNED_INT, nullptr);
     }
 
     m_chunks.clear();

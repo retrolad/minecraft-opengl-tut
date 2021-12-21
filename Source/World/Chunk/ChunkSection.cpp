@@ -1,6 +1,7 @@
 #include "ChunkSection.h"
 
 #include "../World.h"
+#include <iostream>
 
 ChunkSection::ChunkSection(glm::ivec3 location, World& world)
 : m_location(location),
@@ -9,18 +10,17 @@ ChunkSection::ChunkSection(glm::ivec3 location, World& world)
 
 }
 
-// ChunkSection::ChunkSection(glm::ivec3 pos)
-// {
-
-// }
-
-void ChunkSection::setBlock(int x, int y, int z, ChunkBlock chunk)
+void ChunkSection::setBlock(int x, int y, int z, ChunkBlock block)
 {
-    if(outOfBounds(x)) return;
-    if(outOfBounds(y)) return;
-    if(outOfBounds(z)) return;
+    if(outOfBounds(x) ||
+       outOfBounds(y) ||
+       outOfBounds(z))
+    {
+        auto location = toWorldPosition(x, y, z);
+        m_pWorld->setBlock(location.x, location.y, location.z, block);
+    }
 
-    m_blocks[getIndex(x, y, z)] = chunk;
+    m_blocks[getIndex(x, y, z)] = block;
 }
 
 ChunkBlock ChunkSection::getBlock(int x, int y, int z) const 

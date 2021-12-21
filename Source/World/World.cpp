@@ -30,6 +30,30 @@ ChunkBlock World::getBlock(int x, int y, int z) const
     return m_chunks[cX * 16 + cZ].getBlock(bX, y, bZ);
 }
 
+void World::setBlock(int x, int y, int z, ChunkBlock block)
+{
+    int cX = x / CHUNK_SIZE;
+    int cZ = z / CHUNK_SIZE;
+
+    int bX = x % CHUNK_SIZE;
+    int bZ = z % CHUNK_SIZE;
+
+    if(cX < 0 || cX >= 16) return;
+    if(cZ < 0 || cZ >= 16) return;
+
+    m_chunks[cX * 16 + cZ].setBlock(bX, y, bZ, block);
+}
+
+void World::editBlock(int x, int y, int z, ChunkBlock block)
+{
+    setBlock(x, y, z, block);
+
+    int cX = x / CHUNK_SIZE;
+    int cZ = z / CHUNK_SIZE;
+
+    m_chunks[cX * 16 + cZ].makeMeshes();
+}
+
 void World::renderWorld(Renderer& renderer)
 {
     for(auto& chunk : m_chunks)

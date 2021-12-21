@@ -7,6 +7,11 @@ Model::Model(const Mesh& mesh)
     construct(mesh);
 }
 
+Model::~Model()
+{
+    deleteData();
+}
+
 Model::Model(Model&& other)
 :   m_vao           (other.m_vao)
 ,   m_vboCount      (other.m_vboCount)
@@ -32,13 +37,11 @@ Model& Model::operator=(Model&& other)
     return *this;
 }
 
-Model::~Model()
-{
-    deleteData();
-}
-
 void Model::construct(const Mesh& mesh)
 {
+    if(m_vao != 0)
+        deleteData();
+
     GL(glGenVertexArrays(1, &m_vao));
     GL(glBindVertexArray(m_vao));
 

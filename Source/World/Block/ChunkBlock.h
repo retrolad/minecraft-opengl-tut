@@ -21,7 +21,12 @@ struct ChunkBlock
         return id == other.id;
     }
 
-    Block_t id = 2;
+    bool operator!=(const ChunkBlock& other) const 
+    {
+        return id != other.id;
+    }
+
+    Block_t id = 0;
 };
 
 #endif 

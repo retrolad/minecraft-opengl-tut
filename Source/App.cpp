@@ -5,6 +5,7 @@
 #include "World/Chunk/ChunkMeshBuilder.h"
 
 App::App()
+: m_player(&m_world)
 {
     m_camera.bindEntity(m_player);
 }

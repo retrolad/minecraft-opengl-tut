@@ -10,6 +10,7 @@ enum class BlockId : Block_t
     Void = 0,
     Grass,
     Dirt,
+    Stone,
 
     NTYPES
 };

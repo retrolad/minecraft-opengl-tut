@@ -22,10 +22,11 @@ private:
     Renderer m_renderer;    
     Camera m_camera;
 
+    World m_world;
+    
     Player m_player;
 
     // ChunkSection m_chunk;
-    World m_world;
 };
 
 #endif

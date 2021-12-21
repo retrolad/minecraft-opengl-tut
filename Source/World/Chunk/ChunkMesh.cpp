@@ -50,6 +50,19 @@ void ChunkMesh::addFace(const std::vector<GLfloat>& blockFace,
 void ChunkMesh::createModel()
 {
     m_model.construct(m_mesh);
+
+    // When we want to rerender the chunk mesh
+    // we make sure there is no outdated data.
+    m_mesh.vertexPositions.clear();
+    m_mesh.textureCoords.clear();
+    m_mesh.indices.clear();
+
+    m_mesh.vertexPositions.shrink_to_fit();
+    m_mesh.textureCoords.shrink_to_fit();
+    m_mesh.indices.shrink_to_fit();
+
+    m_indiceIdx = 0;
+    m_verticesCount = 0;
 }
 
 const Model& ChunkMesh::getModel() const 

@@ -10,6 +10,24 @@ Chunk::Chunk(const glm::ivec2& location, World& world)
     {
         m_chunks.emplace_back(glm::ivec3(location.x, y, location.y), world);
     }
+
+    for(int y = 0; y < m_chunks.size() * CHUNK_SIZE; y++)
+    for(int x = 0; x < 16; x++)
+    for(int z = 0; z < 16; z++)
+    {
+        if(y < m_chunks.size() * CHUNK_SIZE - 8)
+        {
+            setBlock(x, y, z, BlockId::Stone); 
+        }
+        else if(y < m_chunks.size() * CHUNK_SIZE - 1)
+        {
+            setBlock(x, y, z, BlockId::Dirt);
+        }
+        else 
+        {
+            setBlock(x, y, z, BlockId::Grass);
+        }
+    }
 }
 
 void Chunk::makeMeshes()
@@ -28,6 +46,9 @@ void Chunk::setBlock(int x, int y, int z, ChunkBlock block)
     {
         return;
     }
+
+    int bY = y % CHUNK_SIZE;
+    m_chunks[y / CHUNK_SIZE].setBlock(x, bY, z, block);
 }
 
 ChunkBlock Chunk::getBlock(int x, int y, int z) const
@@ -40,7 +61,7 @@ ChunkBlock Chunk::getBlock(int x, int y, int z) const
     // Block's y position in chunk section
     int bY = y % CHUNK_SIZE;
 
-    m_chunks[y / CHUNK_SIZE].getBlock(x, bY, z);
+    return m_chunks[y / CHUNK_SIZE].getBlock(x, bY, z);
 }
 
 bool Chunk::outOfBound(int x, int y, int z) const
