@@ -17,6 +17,7 @@ class World
         void renderWorld(Renderer& renderer);
     private:
         std::vector<Chunk> m_chunks;
+        std::vector<Chunk*> m_modChunks;
 };
 
 #endif

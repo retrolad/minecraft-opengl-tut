@@ -70,16 +70,16 @@ void Player::keyboardInput(GLFWwindow* window)
 void Player::mouseInput(GLFWwindow* window)
 {
     static double start = glfwGetTime();
-    if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+    for(auto ray = front; glm::length(ray) < 3.0f; ray += front * 0.6f)
     {
-        for(auto ray = front; glm::length(ray) < 3.0f; ray += front * 0.6f)
+        auto rayEnd = position + ray;
+        auto block = m_world->getBlock(rayEnd.x, rayEnd.y, rayEnd.z);
+        
+        if(block != 0)
         {
-            auto rayEnd = position + ray;
-            auto block = m_world->getBlock(rayEnd.x, rayEnd.y, rayEnd.z);
-            
-            if(block != 0)
+            if(glfwGetTime() - start > 0.1)
             {
-                if(glfwGetTime() - start > 0.1)
+                if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
                 {
                     std::cout << "Block hit by ray cast\n";
                     m_world->editBlock(rayEnd.x, rayEnd.y, rayEnd.z, BlockId::Void);
@@ -87,9 +87,17 @@ void Player::mouseInput(GLFWwindow* window)
                     start = glfwGetTime();
                     break;
                 }
+                else if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
+                {
+                    std::cout << "Block hit by ray cast\n";
+                    m_world->editBlock(rayEnd.x, rayEnd.y, rayEnd.z, BlockId::Dirt);
+                
+                    start = glfwGetTime();
+                    break;
+                }
             }
         }
-        start = glfwGetTime();
+        // start = glfwGetTime();
     }
 
     double xPos, yPos;
