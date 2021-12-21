@@ -4,7 +4,8 @@
 #include <iostream>
 
 Player::Player(World* world)
-: m_world(world)
+: m_world(world),
+  m_direction(glm::vec3(0, 0, 0))
 {
     position  = {-1, CHUNK_SIZE * 3.5f, -1};
     rotation  = {0, 0, 0};
