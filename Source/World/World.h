@@ -14,6 +14,8 @@ class World
         void setBlock       (int x, int y, int z, ChunkBlock block);
         void editBlock      (int x, int y, int z, ChunkBlock block);
 
+        void addChunk(int x, int z);
+
         void renderWorld(Renderer& renderer);
     private:
         std::vector<Chunk> m_chunks;

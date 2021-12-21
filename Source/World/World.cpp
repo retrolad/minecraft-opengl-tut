@@ -8,7 +8,7 @@ World::World()
     {
         for(int z = 0; z < worldSize; z++)
         {
-            m_chunks.emplace_back(glm::ivec2(x, z), *this);
+            addChunk(x, z);
         }
     }
 
@@ -62,6 +62,11 @@ void World::editBlock(int x, int y, int z, ChunkBlock block)
     // if(bZ == 0) m_chunks[cX * worldSize + (cZ - 1)].makeMeshes();
     // if(bX == CHUNK_SIZE - 1) m_chunks[(cX + 1) * worldSize + cZ].makeMeshes();
     // if(bZ == CHUNK_SIZE - 1) m_chunks[cX * worldSize + (cZ + 1)].makeMeshes();
+}
+
+void World::addChunk(int x, int z)
+{
+    m_chunks.emplace_back(glm::ivec2(x, z), *this);
 }
 
 void World::renderWorld(Renderer& renderer)

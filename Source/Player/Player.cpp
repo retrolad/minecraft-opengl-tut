@@ -6,7 +6,7 @@
 Player::Player(World* world)
 : m_world(world)
 {
-    position  = {-1, 3, -1};
+    position  = {-1, CHUNK_SIZE * 3.5f, -1};
     rotation  = {0, 0, 0};
     front     = {0, 0, -1};
     up        = {0, 1, 0};
