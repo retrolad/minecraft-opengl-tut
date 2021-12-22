@@ -8,6 +8,7 @@ Player::Player(World* world)
   m_direction(glm::vec3(0, 0, 0))
 {
     position  = {-1, CHUNK_SIZE * 3.5f, -1};
+    // position  = {0, 0, 0};
     rotation  = {0, 0, 0};
     front     = {0, 0, -1};
     up        = {0, 1, 0};

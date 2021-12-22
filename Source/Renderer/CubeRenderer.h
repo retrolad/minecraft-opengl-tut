@@ -1,7 +1,7 @@
 #ifndef CUBERENDERER_H
 #define CUBERENDERER_H
 
-#include "Shaders/Shader.h"
+#include "Shaders/BasicShader.h"
 #include "Texture/Texture.h"
 #include "../Model.h"
 #include "../Camera.h"
@@ -18,7 +18,7 @@ public:
     void add(const glm::vec3& pos);
     
 private:
-    Shader m_shader;
+    BasicShader m_shader;
     Model m_model;
     TextureAtlas m_textureAtlas;
 

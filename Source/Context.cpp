@@ -45,12 +45,6 @@ Context::Context()
 
     // Disable cursor
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    
-    // Enable depth buffer (Z buffer)
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
-    // Cull back faces
-    glCullFace(GL_BACK);
 
     // Set frame limit
     glfwSwapInterval(1);

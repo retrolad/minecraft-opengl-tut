@@ -52,62 +52,49 @@ Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath)
     }
 
     // We use object of shader program to link all shaders
-    ID = glCreateProgram();
+    m_id = glCreateProgram();
 
     // Attach shaders to program and link together
-    glAttachShader(ID, vertexShaderID);
-    glAttachShader(ID, fragmentShaderID);
-    glLinkProgram(ID);
+    glAttachShader(m_id, vertexShaderID);
+    glAttachShader(m_id, fragmentShaderID);
+    glLinkProgram(m_id);
 
      // Check for errors
-    glGetProgramiv(ID, GL_LINK_STATUS, &success);
-    // glValidateProgram(ID); the same?
+    glGetProgramiv(m_id, GL_LINK_STATUS, &success);
+    // glValidateProgram(m_id); the same?
     if(!success)
     {
-        glGetProgramInfoLog(ID, 512, NULL, infoLog);
+        glGetProgramInfoLog(m_id, 512, NULL, infoLog);
         throw std::runtime_error("Failed to link shader program: " + std::string(infoLog));
     }
 
      // Delete shader objets, as we don't need them anymore
     glDeleteShader(vertexShaderID);
     glDeleteShader(fragmentShaderID);
-
-    m_locationProjectionViewMatrix = glGetUniformLocation(ID, "projectionView");
-    m_locationModelMatrix = glGetUniformLocation(ID, "model");
 }
 
 void Shader::use()
 {
     // Set this program as current active shader program
-    glUseProgram(ID);
+    glUseProgram(m_id);
 }
 
 void Shader::setBool(const std::string& name, bool value) const 
 {
-    glUniform1i(glGetUniformLocation(ID, name.c_str()), (GLint)value);
+    glUniform1i(glGetUniformLocation(m_id, name.c_str()), (GLint)value);
 }
 
 void Shader::setInt(const std::string& name, int value) const
 {
-    glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
+    glUniform1i(glGetUniformLocation(m_id, name.c_str()), value);
 }
 
 void Shader::setFloat(const std::string& name, float value) const
 {
-    glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
+    glUniform1f(glGetUniformLocation(m_id, name.c_str()), value);
 }
 
 GLuint Shader::getID() const
 {
-    return ID;
-}
-
-void Shader::setProjectionViewMatrix(const glm::mat4& projMatrix)
-{
-    glUniformMatrix4fv(m_locationProjectionViewMatrix, 1, GL_FALSE, glm::value_ptr(projMatrix));
-}
-
-void Shader::setModelMatrix(const glm::mat4& modelMatrix)
-{
-    glUniformMatrix4fv(m_locationModelMatrix, 1, GL_FALSE, glm::value_ptr(modelMatrix));
+    return m_id;
 }

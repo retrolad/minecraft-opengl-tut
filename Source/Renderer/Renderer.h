@@ -3,6 +3,7 @@
 
 #include "CubeRenderer.h"
 #include "ChunkRenderer.h"
+#include "SkyboxRenderer.h"
 #include <GLFW/glfw3.h>
 
 class Renderer
@@ -14,6 +15,7 @@ public:
 private:
     CubeRenderer m_cubeRenderer;
     ChunkRenderer m_chunkRenderer;
+    SkyboxRenderer m_skyboxRenderer;
 };
 
 #endif

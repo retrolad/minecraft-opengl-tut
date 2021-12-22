@@ -1,6 +1,6 @@
 #include "World.h"
 
-constexpr int worldSize = 16;
+constexpr int worldSize = 8;
 
 World::World()
 {

@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "Shaders/Shader.h"
+#include "Shaders/BasicShader.h"
 
 class Camera;
 class ChunkMesh;
@@ -18,7 +18,7 @@ class ChunkRenderer
 
     private:
         std::vector<const ChunkMesh*> m_chunks;
-        Shader m_shader;
+        BasicShader m_shader;
 };
 
 #endif 
