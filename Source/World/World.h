@@ -4,6 +4,7 @@
 #include "Chunk/ChunkManager.h"
 
 #include <queue>
+#include <deque>
 #include <unordered_map>
 
 class Renderer;
@@ -23,7 +24,7 @@ class World
     private:
         ChunkManager m_chunkManager;
         // std::vector<Chunk> m_chunks;
-        std::queue<glm::ivec3> m_chunksQueue;
+        std::deque<glm::ivec3> m_chunksQueue;
         std::vector<glm::ivec3> m_modChunks;
 };
 

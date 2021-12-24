@@ -1,6 +1,6 @@
 #include "World.h"
 
-constexpr int worldSize = 8;
+constexpr int worldSize = 32;
 
 World::World()
 : m_chunkManager(*this)
@@ -10,7 +10,7 @@ World::World()
         for(int z = 0; z < worldSize; z++)
         {
             // addChunk(x, z);
-            m_chunksQueue.emplace(x, 0, z);
+            m_chunksQueue.emplace_back(x, 0, z);
         }
     }
 
@@ -58,7 +58,7 @@ void World::editBlock(int x, int y, int z, ChunkBlock block)
     int csY = y / CHUNK_SIZE;
 
     setBlock(x, y, z, block);
-    m_chunksQueue.emplace(cX, csY, cZ);
+    m_chunksQueue.emplace_front(cX, csY, cZ);
     // m_modChunks.push_back(cX, cZ);
 
     // Rerender neighbour mesh if editing edge block
@@ -96,7 +96,7 @@ void World::renderWorld(Renderer& renderer)
             chunk.makeMeshes();
         }
 
-        m_chunksQueue.pop();
+        m_chunksQueue.pop_front();
     }
 
     for(auto& chunk : m_chunkManager.getChunks())
