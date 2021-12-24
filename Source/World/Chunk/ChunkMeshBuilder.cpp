@@ -95,7 +95,7 @@ void ChunkMeshBuilder::buildMesh(ChunkMesh& mesh)
     }
 
     auto end = glfwGetTime();
-    std::cout << "[Mesh " << meshId++ << "] built in: " << (end - start) * 1000 << "ms\n";    
+    // std::cout << "[Mesh " << meshId++ << "] built in: " << (end - start) * 1000 << "ms\n";    
 }
 
 void ChunkMeshBuilder::tryAddFace(const std::vector<GLfloat>& blockFace,

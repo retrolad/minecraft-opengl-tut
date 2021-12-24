@@ -12,6 +12,7 @@ App::App()
 
 void App::run()
 {
+    std::cout << glfwGetTime() << std::endl;
     std::cout << glGetString(GL_VERSION) << std::endl;
 
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

@@ -20,7 +20,8 @@ class ChunkSection
         ChunkBlock getBlock (int x, int y, int z) const;
 
         const glm::ivec3 getLocation() const;
-        void setLocation(int x, int y, int z);
+
+        void buildMesh();
 
         ChunkMesh m_mesh;
     private:

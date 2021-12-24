@@ -1,6 +1,8 @@
 #include "ChunkSection.h"
 
 #include "../World.h"
+#include "ChunkMeshBuilder.h"
+
 #include <iostream>
 
 ChunkSection::ChunkSection(glm::ivec3 location, World& world)
@@ -61,7 +63,8 @@ const glm::ivec3 ChunkSection::getLocation() const
     return m_location;
 }
 
-void ChunkSection::setLocation(int x, int y, int z)
+void ChunkSection::buildMesh()
 {
-    m_location = {x, y, z};
+    ChunkMeshBuilder(*this).buildMesh(m_mesh);
+    m_mesh.createModel();
 }

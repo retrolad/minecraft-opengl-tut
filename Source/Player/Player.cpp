@@ -105,7 +105,7 @@ void Player::mouseInput(GLFWwindow* window)
     double xPos, yPos;
     glfwGetCursorPos(window, &xPos, &yPos);
     static double lastX = xPos, lastY = yPos;
-    static const double VERTICAL_BOUND = 80.0f;
+    static const double VERTICAL_BOUND = 89.0f;
 
     double xOffset = xPos - lastX;
     double yOffset = lastY - yPos;

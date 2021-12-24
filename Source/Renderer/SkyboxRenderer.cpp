@@ -12,7 +12,7 @@ SkyboxRenderer::SkyboxRenderer()
     "front.png"
 })
 {
-    constexpr GLfloat SIZE = 50.0f;
+    constexpr GLfloat SIZE = 500.0f;
     std::vector<GLfloat> skyboxVertices = {
         //Right
         SIZE, -SIZE,  SIZE,

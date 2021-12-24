@@ -3,20 +3,23 @@
 constexpr int worldSize = 8;
 
 World::World()
+: m_chunkManager(*this)
 {
     for(int x = 0; x < worldSize; x++)
     {
         for(int z = 0; z < worldSize; z++)
         {
-            addChunk(x, z);
+            // addChunk(x, z);
+            m_chunksQueue.emplace(x, 0, z);
         }
     }
 
-    for(auto& chunk : m_chunks)
-        chunk.makeMeshes();
+    // prepareChunks();
+    // for(auto& chunk : m_chunks)
+    //     chunk.makeMeshes();
 }
 
-ChunkBlock World::getBlock(int x, int y, int z) const
+ChunkBlock World::getBlock(int x, int y, int z)
 {
     // Find out which chunk this block is located at
     int cX = x / CHUNK_SIZE;
@@ -29,7 +32,7 @@ ChunkBlock World::getBlock(int x, int y, int z) const
     if(cX < 0 || cX >= worldSize) return BlockId::Void;
     if(cZ < 0 || cZ >= worldSize) return BlockId::Void;
 
-    return m_chunks[cX * worldSize + cZ].getBlock(bX, y, bZ);
+    return m_chunkManager.getChunk(cX, cZ).getBlock(bX, y, bZ);
 }
 
 void World::setBlock(int x, int y, int z, ChunkBlock block)
@@ -43,7 +46,7 @@ void World::setBlock(int x, int y, int z, ChunkBlock block)
     if(cX < 0 || cX >= worldSize) return;
     if(cZ < 0 || cZ >= worldSize) return;
 
-    m_chunks[cX * worldSize + cZ].setBlock(bX, y, bZ, block);
+    m_chunkManager.getChunk(cX, cZ).setBlock(bX, y, bZ, block);
 }
 
 void World::editBlock(int x, int y, int z, ChunkBlock block)
@@ -51,8 +54,12 @@ void World::editBlock(int x, int y, int z, ChunkBlock block)
     int cX = x / CHUNK_SIZE;
     int cZ = z / CHUNK_SIZE;
 
+    // ChunkSection y location
+    int csY = y / CHUNK_SIZE;
+
     setBlock(x, y, z, block);
-    m_modChunks.push_back(&m_chunks[cX * worldSize + cZ]);
+    m_chunksQueue.emplace(cX, csY, cZ);
+    // m_modChunks.push_back(cX, cZ);
 
     // Rerender neighbour mesh if editing edge block
     // int bX = x % CHUNK_SIZE;
@@ -66,16 +73,32 @@ void World::editBlock(int x, int y, int z, ChunkBlock block)
 
 void World::addChunk(int x, int z)
 {
-    m_chunks.emplace_back(glm::ivec2(x, z), *this);
+    m_chunkManager.getChunk(x,z).makeMeshes();
 }
 
 void World::renderWorld(Renderer& renderer)
 {
-    for(auto& chunk : m_modChunks)
-        chunk->makeMeshes();
+    // for(auto& chunk : m_modChunks)
+    //     chunk->makeMeshes();
 
-    m_modChunks.clear();
+    // m_modChunks.clear();
 
-    for(auto& chunk : m_chunks)
-        chunk.drawChunks(renderer);
+    if(!m_chunksQueue.empty())
+    {
+        auto& loc = m_chunksQueue.front();
+        Chunk& chunk = m_chunkManager.getChunk(loc.x, loc.z);
+
+        if(chunk.beenLoaded())
+        {
+            chunk.getSection(loc.y).buildMesh();
+        } else 
+        {
+            chunk.makeMeshes();
+        }
+
+        m_chunksQueue.pop();
+    }
+
+    for(auto& chunk : m_chunkManager.getChunks())
+        chunk.second.drawChunks(renderer);
 }

@@ -3,9 +3,15 @@
 #include "ChunkMeshBuilder.h"
 #include "../../Renderer/Renderer.h"
 
+#include <iostream>
+
+int Chunk::nextID = 0;
+
 Chunk::Chunk(const glm::ivec2& location, World& world)
 : m_location(location)
 {
+    m_id = ++nextID;
+
     for(int y = 0; y < 3; y++)
     {
         m_chunks.emplace_back(glm::ivec3(location.x, y, location.y), world);
@@ -34,10 +40,11 @@ void Chunk::makeMeshes()
 {
     for(auto& chunk : m_chunks)
     {
-        ChunkMeshBuilder builder(chunk);
-        builder.buildMesh(chunk.m_mesh);
-        chunk.m_mesh.createModel();
+        chunk.buildMesh();
     }
+
+    m_isLoaded = true;
+    std::cout << "[Chunk " << m_id++ << "] has been built\n";    
 }
 
 void Chunk::setBlock(int x, int y, int z, ChunkBlock block)
@@ -81,10 +88,24 @@ bool Chunk::outOfBound(int x, int y, int z) const
     return 0;
 }
 
-void Chunk::drawChunks(Renderer& renderer)
+void Chunk::drawChunks(Renderer& renderer) const
 {
     for(auto& chunk : m_chunks)
     {
         renderer.drawChunk(chunk.m_mesh);
     }
+}
+
+ChunkSection& Chunk::getSection(int index)
+{
+    if(index >= m_chunks.size())
+    {
+        
+    }
+    return m_chunks.at(index);
+}
+
+bool Chunk::beenLoaded() const
+{
+    return m_isLoaded;
 }
