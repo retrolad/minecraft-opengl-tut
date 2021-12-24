@@ -16,7 +16,7 @@ void App::run()
     std::cout << glGetString(GL_VERSION) << std::endl;
 
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-\
+
     while(!glfwWindowShouldClose(m_context.window))
     {
         float currentFrame = glfwGetTime();

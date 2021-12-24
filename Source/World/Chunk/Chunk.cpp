@@ -44,7 +44,7 @@ void Chunk::makeMeshes()
     }
 
     m_isLoaded = true;
-    std::cout << "[Chunk " << m_id++ << "] has been built\n";    
+    std::cout << "[Chunk " << m_id << "] has been built\n";    
 }
 
 void Chunk::setBlock(int x, int y, int z, ChunkBlock block)

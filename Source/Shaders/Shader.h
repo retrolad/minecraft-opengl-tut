@@ -18,6 +18,9 @@ class Shader {
         void setBool(const std::string& name, bool value) const;
         void setInt(const std::string& name, int value) const; 
         void setFloat(const std::string& name, float value) const;
+        void setVector3f(GLint location, float x, float y, float z);
+        void setMatrix4(GLint location, const glm::mat4& matrix);
+
         GLuint getID() const;
 
     protected:

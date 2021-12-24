@@ -1,5 +1,10 @@
 #include "Renderer.h"
 
+Renderer::Renderer()
+{
+    m_textRenderer.load("NeoSans", 16);
+}
+
 void Renderer::drawCube(const glm::vec3& pos)
 {
     // m_cubeRenderer.add(pos);
@@ -20,9 +25,13 @@ void Renderer::EndFrame(GLFWwindow* window, const Camera& camera)
     // Cull back faces
     glCullFace(GL_BACK);
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     // m_cubeRenderer.render(camera);
     m_chunkRenderer.render(camera);
     m_skyboxRenderer.render(camera);
+    m_textRenderer.render("FPS", 20.0f, 650.0f, 1.3f, {1.0f, 0.0f, 1.0f});
 
     // Swap back and front buffers
     glfwSwapBuffers(window);

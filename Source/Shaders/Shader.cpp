@@ -48,7 +48,7 @@ Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath)
     if(!success)
     {
         glGetShaderInfoLog(fragmentShaderID, 512, NULL, infoLog);
-        throw std::runtime_error("Failed to compile vertex shader: " + std::string(infoLog));
+        throw std::runtime_error("Failed to compile fragment shader: " + std::string(infoLog));
     }
 
     // We use object of shader program to link all shaders
@@ -92,6 +92,16 @@ void Shader::setInt(const std::string& name, int value) const
 void Shader::setFloat(const std::string& name, float value) const
 {
     glUniform1f(glGetUniformLocation(m_id, name.c_str()), value);
+}
+
+void Shader::setVector3f(GLint location, float x, float y, float z)
+{
+    glUniform3f(location, x, y, z);
+}
+
+void Shader::setMatrix4(GLint location, const glm::mat4& matrix)
+{
+    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
 GLuint Shader::getID() const
