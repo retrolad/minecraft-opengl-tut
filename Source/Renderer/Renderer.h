@@ -10,17 +10,20 @@
 
 class Renderer
 {
-public:
-    Renderer();
+    public:
+        Renderer();
 
-    void drawCube(const glm::vec3& pos);
-    void drawChunk(const ChunkMesh& mesh);
-    void EndFrame(GLFWwindow* window, const Camera& camera);
-private:
-    CubeRenderer m_cubeRenderer;
-    ChunkRenderer m_chunkRenderer;
-    SkyboxRenderer m_skyboxRenderer;
-    TextRenderer m_textRenderer;
+        void drawCube(const glm::vec3& pos);
+        void drawChunk(const ChunkMesh& mesh);
+        void drawText(const Text& text);
+
+        void EndFrame(GLFWwindow* window, const Camera& camera);
+        
+    private:
+        CubeRenderer m_cubeRenderer;
+        ChunkRenderer m_chunkRenderer;
+        SkyboxRenderer m_skyboxRenderer;
+        TextRenderer m_textRenderer;
 };
 
 #endif

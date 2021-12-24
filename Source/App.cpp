@@ -27,6 +27,7 @@ void App::run()
         m_player.handleInput(m_context.window);
         m_player.update(deltaTime);
         m_camera.update();  
+        m_fpsCounter.render(m_renderer);
         m_world.renderWorld(m_renderer);
         m_renderer.EndFrame(m_context.window, m_camera);
         

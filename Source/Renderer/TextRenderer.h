@@ -3,8 +3,10 @@
 
 #include <map>
 #include <string>
+#include <vector>
 #include <glm/glm.hpp>
 
+#include "../Utils/Text.h"
 #include "../Shaders/TextShader.h"
 
 struct Character
@@ -21,10 +23,13 @@ class TextRenderer
         TextRenderer();
 
         void load(std::string font, unsigned int fontSize);
+        
+        void addText(const Text& text);
 
-        void render(const std::string& text, float x, float y, float scale, const glm::vec3& color);
+        void render();
     private:
         std::map<char, Character> m_characters;
+        std::vector<Text> m_texts;
         GLuint m_VAO;
         GLuint m_VBO;
 

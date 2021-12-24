@@ -105,45 +105,57 @@ void TextRenderer::load(std::string font, unsigned int fontSize)
     FT_Done_FreeType(ft);
 }
 
-void TextRenderer::render(const std::string& text, float x, float y, float scale, const glm::vec3& color)
+void TextRenderer::addText(const Text& text)
+{
+    m_texts.push_back(text);
+}
+
+void TextRenderer::render()
 {
     m_shader.use();
-
-    m_shader.setProjectionMatrix();
-    m_shader.setTextColor({color.x, color.y, color.z});
 
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(m_VAO);
 
-    for(std::string::const_iterator c = text.begin(); c != text.end(); c++)
+    for(auto& text : m_texts)
     {
-        Character ch = m_characters[*c];
+        float x = text.x;
 
-        float xpos = x + ch.bearing.x * scale;
-        float ypos = y - (ch.size.y - ch.bearing.y) * scale;
+        m_shader.setProjectionMatrix();
+        m_shader.setTextColor({text.color.r, text.color.g, text.color.b});
+        
+        for(std::string::const_iterator c = text.content.begin(); c != text.content.end(); c++)
+        {
+            Character ch = m_characters[*c];
 
-        float w = ch.size.x * scale;
-        float h = ch.size.y * scale;
+            float xpos = x + ch.bearing.x * text.scale;
+            float ypos = text.y - (ch.size.y - ch.bearing.y) * text.scale;
 
-        GLfloat vertices[6][4] = {
-            {xpos,       ypos + h,   0.0f, 0.0f},
-            {xpos,       ypos,       0.0f, 1.0f},
-            {xpos + w,   ypos,       1.0f, 1.0f},
+            float w = ch.size.x * text.scale;
+            float h = ch.size.y * text.scale;
 
-            {xpos,       ypos + h,   0.0f, 0.0f}, 
-            {xpos + w,   ypos,       1.0f, 1.0f},
-            {xpos + w,   ypos + h,   1.0f, 0.0f} 
-        };
+            GLfloat vertices[6][4] = {
+                {xpos,       ypos + h,   0.0f, 0.0f},
+                {xpos,       ypos,       0.0f, 1.0f},
+                {xpos + w,   ypos,       1.0f, 1.0f},
 
-        glBindTexture(GL_TEXTURE_2D, ch.textureID); 
-        glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
+                {xpos,       ypos + h,   0.0f, 0.0f}, 
+                {xpos + w,   ypos,       1.0f, 1.0f},
+                {xpos + w,   ypos + h,   1.0f, 0.0f} 
+            };
 
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+            glBindTexture(GL_TEXTURE_2D, ch.textureID); 
+            glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+            glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-        x += (ch.advance >> 6) * scale;
+            glDrawArrays(GL_TRIANGLES, 0, 6);
+
+            x += (ch.advance >> 6) * text.scale;
+        }
     }
+
+    m_texts.clear();
 
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);

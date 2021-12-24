@@ -7,6 +7,7 @@
 #include "Player/Player.h"
 #include "World/Chunk/ChunkSection.h"
 #include "World/World.h"
+#include "Utils/FPSCounter.h"
 
 class App
 {
@@ -26,6 +27,7 @@ private:
     
     Player m_player;
 
+    FPSCounter m_fpsCounter;
     // ChunkSection m_chunk;
 };
 

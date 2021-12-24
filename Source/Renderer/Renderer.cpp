@@ -15,6 +15,11 @@ void Renderer::drawChunk(const ChunkMesh& mesh)
     m_chunkRenderer.add(mesh);
 }
 
+void Renderer::drawText(const Text& text)
+{
+    m_textRenderer.addText(text);
+}
+
 void Renderer::EndFrame(GLFWwindow* window, const Camera& camera)
 {
     glClearColor(0.2f, 0.45f, 0.9f, 1.0f);
@@ -31,7 +36,7 @@ void Renderer::EndFrame(GLFWwindow* window, const Camera& camera)
     // m_cubeRenderer.render(camera);
     m_chunkRenderer.render(camera);
     m_skyboxRenderer.render(camera);
-    m_textRenderer.render("FPS", 20.0f, 650.0f, 1.3f, {1.0f, 0.0f, 1.0f});
+    m_textRenderer.render();
 
     // Swap back and front buffers
     glfwSwapBuffers(window);
