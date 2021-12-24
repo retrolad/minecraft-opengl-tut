@@ -86,7 +86,9 @@ void ChunkMeshBuilder::buildMesh(ChunkMesh& mesh)
         auto data = &block.getData().getBlockData();
 
         // Try to add each face of the block to the mesh
-        tryAddFace(bottomFace, data->bottomCoords, {x, y, z}, {x,   y-1, z});
+        // Do not draw bottom chunks faces
+        if(y > 0 && m_pChunk->getLocation().y > 0)
+            tryAddFace(bottomFace, data->bottomCoords, {x, y, z}, {x,   y-1, z});
         tryAddFace(topFace,    data->topCoords,    {x, y, z}, {x,   y+1, z});
         tryAddFace(frontFace,  data->sideCoords,   {x, y, z}, {x,   y,   z+1});
         tryAddFace(backFace,   data->sideCoords,   {x, y, z}, {x,   y,   z-1});

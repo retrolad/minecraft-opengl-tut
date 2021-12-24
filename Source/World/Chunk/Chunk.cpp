@@ -100,7 +100,7 @@ ChunkSection& Chunk::getSection(int index)
 {
     if(index >= m_chunks.size())
     {
-        
+        // TODO add chunk section
     }
     return m_chunks.at(index);
 }
