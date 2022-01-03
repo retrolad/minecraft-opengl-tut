@@ -16,6 +16,7 @@ void main()
     // FragColor = vec4(texCoord, 1.0, 1.0);
     // texture function samples texture color
     FragColor = texture(texture1, texCoord);
+    if(FragColor.a == 0) discard;
 
     // mix is used to interpolate color between multiple textures
     // the third argument decides in which proportions interpolation will

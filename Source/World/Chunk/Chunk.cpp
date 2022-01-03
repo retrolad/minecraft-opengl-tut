@@ -7,6 +7,8 @@
 #include <iostream>
 #include <ctime>
 
+#include <random>
+#include <functional>
 
 int Chunk::nextID = 0;
 
@@ -16,14 +18,21 @@ Chunk::Chunk(const glm::ivec2& location, World& world)
     m_id = ++nextID;
 
     static PerlinNoise noise;
-
+    std::vector<glm::ivec3> trees;
     std::array<int, CHUNK_SIZE * CHUNK_SIZE> heightMap;
+
+    // std::minstd_rand re(500);
+    std::random_device rd;
+    std::mt19937 re(rd());
+    std::uniform_int_distribution<> dist(0, 150);
+    auto rand = std::bind(dist, re);
+
     int maxHeight = 0;
 
     for(int z = 0; z < CHUNK_SIZE; z++)
     for(int x = 0; x < CHUNK_SIZE; x++)
     {
-        int h = (int)(noise.getHeight(x, z, m_location.x, m_location.y) * 255);
+        int h = (int)(noise.getHeight(x, z, m_location.x, m_location.y) * 255 + 40);
         heightMap[x + z * CHUNK_SIZE] = h;
 
         if(h > maxHeight) maxHeight = h;
@@ -36,25 +45,35 @@ Chunk::Chunk(const glm::ivec2& location, World& world)
 
     for(int z = 0; z < 16; z++)
     for(int x = 0; x < 16; x++)
+    for(int y = 0; y < maxHeight + 1; y++)
     {
-        for(int y = 0; y < maxHeight + 1; y++)
+        int h = heightMap[x + z * CHUNK_SIZE];
+        if(y < h - 8)
         {
-            int h = heightMap[x + z * CHUNK_SIZE];
-            if(y < h - 8)
+            setBlock(x, y, z, BlockId::Stone); 
+        }
+        else if(y < h)
+        {
+            setBlock(x, y, z, BlockId::Dirt);
+        }
+        else if(y == h)
+        {
+            if(rand() == 0)
             {
-                setBlock(x, y, z, BlockId::Stone); 
-            }
-            else if(y < h - 1)
-            {
-                setBlock(x, y, z, BlockId::Dirt);
-            }
-            else if(y == h - 1)
-            {
-                setBlock(x, y, z, BlockId::Grass);
-            }
+                std::uniform_int_distribution<> distI(5,9);
+                auto randI = std::bind(distI, re);
+                int th = randI();
+                for(int i = 0; i < th; i++)
+                    setBlock(x, y + i, z, BlockId::OakBark);
+
+                for(int tx = -2; tx <= 2; tx++)
+                for(int tz = -2; tz <= 2; tz++)
+                for(int ty = 0; ty < 3; ty++)
+                    setBlock(x + tx, y + th + ty, z + tz, BlockId::OakLeaf);
+            } 
             else 
             {
-                setBlock(x, y, z, BlockId::Void);
+                setBlock(x, y, z, BlockId::Grass);
             }
         }
     }

@@ -37,6 +37,8 @@ ChunkBlock World::getBlock(int x, int y, int z)
 
 void World::setBlock(int x, int y, int z, ChunkBlock block)
 {
+    if(y <= 0) return;
+
     int cX = x / CHUNK_SIZE;
     int cZ = z / CHUNK_SIZE;
 

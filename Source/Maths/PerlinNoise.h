@@ -21,7 +21,7 @@ typedef Vec2<double> Vec2f;
 class PerlinNoise
 {
     public:
-        PerlinNoise();
+        PerlinNoise(unsigned seed = 3069);
 
         double getHeight(int x, int z, int chunkX, int chunkZ);
 

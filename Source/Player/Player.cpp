@@ -83,7 +83,7 @@ void Player::mouseInput(GLFWwindow* window)
             {
                 if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
                 {
-                    std::cout << "Block hit by ray cast\n";
+                    // std::cout << "Block hit by ray cast\n";
                     m_world->editBlock(rayEnd.x, rayEnd.y, rayEnd.z, BlockId::Void);
                     
                     start = glfwGetTime();
@@ -91,7 +91,7 @@ void Player::mouseInput(GLFWwindow* window)
                 }
                 else if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))
                 {
-                    std::cout << "Block hit by ray cast\n";
+                    // std::cout << "Block hit by ray cast\n";
                     m_world->editBlock(rayEnd.x, rayEnd.y, rayEnd.z, BlockId::Dirt);
                 
                     start = glfwGetTime();

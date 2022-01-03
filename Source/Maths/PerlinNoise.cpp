@@ -17,7 +17,7 @@ inline double smoothstep(const double& t)
     // return ((6 * t - 15) * t + 10) * t * t * t;
 }
 
-PerlinNoise::PerlinNoise()
+PerlinNoise::PerlinNoise(unsigned seed)
 {
     m_frequency     = 0.005;
     m_lacunarity    = 2.0;
@@ -124,5 +124,5 @@ double PerlinNoise::getHeight(int x, int z, int chunkX, int chunkZ)
     //     if(noiseSum > m_maxNoise) m_maxNoise = noiseSum;
     }
 
-    return (noiseSum / amplitudeSum + 1.0) * 0.5;
+    return std::pow((noiseSum / amplitudeSum + 1.0) * 0.5, 4);
 }
