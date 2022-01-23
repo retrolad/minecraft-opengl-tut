@@ -32,6 +32,7 @@ PerlinNoise::PerlinNoise(unsigned seed)
     for(unsigned i = 0; i < m_scMaxSize; i++)
     {
 #if 1
+        /* This is non uniform distribution */
         // Create random vector(gradient) in the range [0,1] and map to [-1,1]
         m_rvals[i] = Vec2f(2 * randF() - 1, 2 * randF() - 1);
         auto length2 = m_rvals[i].length2();
@@ -115,11 +116,11 @@ double PerlinNoise::getHeight(int x, int z, int chunkX, int chunkZ)
 
     for(unsigned l = 0; l < m_layers; l++)
     {
-        noiseSum    += get(worldX * m_frequency,worldZ * m_frequency) * amplitude;
+        noiseSum     += get(worldX * m_frequency,worldZ * m_frequency) * amplitude;
         amplitudeSum += amplitude;
-        amplitude   *= m_gain;
-        worldX      *= m_lacunarity;
-        worldZ      *= m_lacunarity;
+        amplitude    *= m_gain;
+        worldX       *= m_lacunarity;
+        worldZ       *= m_lacunarity;
 
     //     if(noiseSum > m_maxNoise) m_maxNoise = noiseSum;
     }
